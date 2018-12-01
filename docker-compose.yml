@@ -1,0 +1,19 @@
+version: "3"
+services:
+  app:
+    container_name: mann-stack-app
+    restart: always
+    image: mann-stack-app
+    build:
+      context: .
+    ports:
+      - "${EXTERNAL_PORT}:3000"
+    volumes:
+      - mann-stack-app-logs:/usr/src/app/server/logs
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db

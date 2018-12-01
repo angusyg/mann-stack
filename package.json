@@ -1,0 +1,43 @@
+{
+  "name": "mann-stack",
+  "version": "1.0.0",
+  "description": "Mann stack starter",
+  "main": "./server/dist/main.js",
+  "license": "MIT",
+  "author": "Angusyg",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "concurrently \"cd client && npm i\" \"cd server && npm i\"",
+    "build": "concurrently \"cd client && npm run build\" \"cd server && npm run build\"",
+    "logs": "pm2 logs mann-stack",
+    "start": "pm2 start ecosystem.config.js --env production",
+    "stop": "pm2 delete ecosystem.config.js",
+    "start:dev": "concurrently \"cd client && npm run start\" \"cd server && npm run start:dev\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angusyg/mann-stack.git"
+  },
+  "keywords": [
+    "mongodb",
+    "mongoose",
+    "angular",
+    "nestjs",
+    "node",
+    "pm2",
+    "docker",
+    "docker-compose",
+    "typescript"
+  ],
+  "bugs": {
+    "url": "https://github.com/angusyg/mann-stack/issues"
+  },
+  "homepage": "https://github.com/angusyg/mann-stack#readme",
+  "dependencies": {
+    "pm2": "^3.2.2"
+  },
+  "devDependencies": {
+    "concurrently": "^3.6.1"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "linters": {
+    "*": ["prettier --write", "tslint --fix", "git add"]
+  },
+  "ignore": ["dist/**/*"]
+}
