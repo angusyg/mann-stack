@@ -1,6 +1,8 @@
 {
   "linters": {
-    "*": ["prettier --write", "tslint --fix", "git add"]
+    "*.{js,ts}": ["prettier --write", "tslint --fix", "git add"],
+    "*.scss": ["sass-lint-auto-fix", "git add"],
+    "*.html": ["prettier --write", "git add"]
   },
   "ignore": ["dist/**/*"]
 }
