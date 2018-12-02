@@ -3,19 +3,19 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '../config/config.service';
 
 import { loggerProviders } from './logger.providers';
-import { LogService } from './logger.service';
+import { Logger } from './logger.service';
 
 // Mocks
 jest.mock('../config/config.service');
 
 describe('LoggerService', () => {
-  let service: LogService;
+  let service: Logger;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [...loggerProviders, ConfigService],
     }).compile();
-    service = module.get<LogService>(LogService);
+    service = module.get<Logger>(Logger);
   });
 
   test('should be defined', () => {

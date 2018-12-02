@@ -1,11 +1,11 @@
 import { ConfigService } from '../config/config.service';
 
-import { LogService } from './logger.service';
+import { Logger } from './logger.service';
 
 export const loggerProviders = [
   {
-    provide: LogService,
-    useFactory: (configService: ConfigService) => new LogService(configService),
+    provide: Logger,
+    useFactory: (configService: ConfigService) => new Logger(configService),
     inject: [ConfigService],
   },
 ];

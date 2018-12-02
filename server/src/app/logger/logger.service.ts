@@ -7,16 +7,16 @@ import { ConfigService } from '../config/config.service';
  * Service to log message
  *
  * @export
- * @class LogService
+ * @class Logger
  * @implements {LoggerService}
  */
-export class LogService implements LoggerService {
+export class Logger implements LoggerService {
   /**
    * Pino logger instance
    *
    * @private
    * @type {*}
-   * @memberof LogService
+   * @memberof Logger
    */
   private readonly logger: pino.Logger;
 
@@ -32,7 +32,7 @@ export class LogService implements LoggerService {
    * Return pino logger instance
    *
    * @returns pino logger instance
-   * @memberof LogService
+   * @memberof Logger
    */
   public getLogger() {
     return this.logger;
@@ -43,7 +43,7 @@ export class LogService implements LoggerService {
    *
    * @param {*} message message to log
    * @param {*} [data] additional data to log
-   * @memberof LogService
+   * @memberof Logger
    */
   public trace(message: any, data?: any) {
     this.doLog('trace', message, data);
@@ -54,7 +54,7 @@ export class LogService implements LoggerService {
    *
    * @param {*} message message to log
    * @param {*} [data] additional data to log
-   * @memberof LogService
+   * @memberof Logger
    */
   public debug(message: any, data?: any) {
     this.doLog('debug', message, data);
@@ -65,7 +65,7 @@ export class LogService implements LoggerService {
    *
    * @param {*} message message to log
    * @param {*} [data] additional data to log
-   * @memberof LogService
+   * @memberof Logger
    */
   public info(message: any, data?: any) {
     this.doLog('info', message, data);
@@ -76,7 +76,7 @@ export class LogService implements LoggerService {
    *
    * @param {*} message message to log
    * @param {*} [data] additional data to log
-   * @memberof LogService
+   * @memberof Logger
    */
   public log(message: any, data?: any) {
     this.doLog('info', message, data);
@@ -87,7 +87,7 @@ export class LogService implements LoggerService {
    *
    * @param {*} message message to log
    * @param {*} [data] additional data to log
-   * @memberof LogService
+   * @memberof Logger
    */
   public warn(message: any, data?: any) {
     this.doLog('warn', message, data);
@@ -98,7 +98,7 @@ export class LogService implements LoggerService {
    *
    * @param {*} message message to log
    * @param {*} [data] additional data to log
-   * @memberof LogService
+   * @memberof Logger
    */
   public error(message: any, data?: any) {
     this.doLog('error', message, data);
@@ -109,7 +109,7 @@ export class LogService implements LoggerService {
    *
    * @param {*} message message to log
    * @param {*} [data] additional data to log
-   * @memberof LogService
+   * @memberof Logger
    */
   public fatal(message: any, data?: any) {
     this.doLog('fatal', message, data);
@@ -122,7 +122,7 @@ export class LogService implements LoggerService {
    * @param {pino.Level} level log message level
    * @param {string} message message to log
    * @param {*} [data] optional data to add to log line
-   * @memberof LogService
+   * @memberof Logger
    */
   private doLog(level: pino.Level, message: string, data?: any) {
     const child = this.logger.child({
@@ -137,7 +137,7 @@ export class LogService implements LoggerService {
    *
    * @private
    * @returns {string} file:line:column
-   * @memberof LogService
+   * @memberof Logger
    */
   private getCaller(): string {
     // If possible, extracts infos from stack

@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import * as uuid from 'uuid';
 
 import { ConfigService } from '../config/config.service';
+import { Logger } from '../logger/logger.service';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
@@ -12,7 +13,7 @@ import { User } from './interfaces/user.interface';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject('UserModelToken') private readonly userModel: Model<User>, private configService: ConfigService) {}
+  constructor(@Inject('UserModelToken') private readonly userModel: Model<User>, private configService: ConfigService, private logger: Logger) {}
 
   /**
    * Creates a new User
@@ -47,9 +48,12 @@ export class UsersService {
    * @memberof UsersService
    */
   public async login(infos: LoginDto): Promise<Tokens> {
-    // Logger.debug(`Trying to log in user with login '${infos.login}'`);
+    this.logger.debug(`Trying to log in user with login '${infos.login}'`);
     // Search for user with given login
-    const user = await this.userModel.findOne({ login: infos.login }).select('+password').exec();
+    const user = await this.userModel
+      .findOne({ login: infos.login })
+      .select('+password')
+      .exec();
     // If no user found, rejects
     if (!user) throw new UnauthorizedException('BAD_LOGIN');
     // Password comparison beetween user password and given one
@@ -57,7 +61,7 @@ export class UsersService {
     // If passwords don't match, reject
     if (!match) throw new UnauthorizedException('BAD_PASSWORD');
     // All good, creation of API tokens
-    // logger.debug(`Creating new refresh token for user with login '${user.login}'`);
+    this.logger.debug(`Creating new refresh token for user with login '${user.login}'`);
     user.refreshToken = uuid.v4();
     // Updates user with his new refresh token
     await user.save();
@@ -77,7 +81,7 @@ export class UsersService {
    * @memberof ApiService
    */
   private generateAccessToken(user: User): string {
-    // logger.debug(`Generating access token for user with login '${user.login}'`);
+    this.logger.debug(`Generating access token for user with login '${user.login}'`);
     return jwt.sign(
       {
         id: user.id,
