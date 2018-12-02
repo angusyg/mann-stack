@@ -76,9 +76,9 @@ export class UsersService {
    * Generates an access token with user infos
    *
    * @private
-   * @param {IUserDocument} user user informations
-   * @returns {string} JWT access token
-   * @memberof ApiService
+   * @param {User} user
+   * @returns {string}
+   * @memberof UsersService
    */
   private generateAccessToken(user: User): string {
     this.logger.debug(`Generating access token for user with login '${user.login}'`);
