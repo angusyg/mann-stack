@@ -61,9 +61,11 @@ export class ConfigService {
       .items(Joi.string())
       .default([]),
     CORS_CREDENTIALS: Joi.boolean().default(true),
-    CORS_MAX_AGE: Joi.number().default(600),
+    CORS_MAX_AGE: Joi.number().default(60 * 10),
     CORS_PREFLIGHT_CONTINUE: Joi.boolean().default(false),
     CORS_OPTIONS_SUCCESSS_CODE: Joi.number().default(204),
+    JWT_SECRET: Joi.string().default('JWTSecret'),
+    JWT_EXPIRATION_DELAY: Joi.number().default(60 * 10),
   });
 
   /**

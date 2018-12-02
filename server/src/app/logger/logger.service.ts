@@ -20,11 +20,11 @@ export class LogService implements LoggerService {
    */
   private readonly logger: pino.Logger;
 
-  constructor(configService: ConfigService) {
+  constructor(private configService: ConfigService) {
     this.logger = pino({
       useLevelLabels: true,
-      enabled: configService.get('LOG_ENABLED'),
-      level: configService.get('LOG_LEVEL'),
+      enabled: this.configService.get('LOG_ENABLED'),
+      level: this.configService.get('LOG_LEVEL'),
     });
   }
 

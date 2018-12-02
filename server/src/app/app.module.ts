@@ -1,8 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
-
 import * as cookieParser from 'cookie-parser';
 import * as cors from 'cors';
-import * as csurf from 'csurf';
 import * as expressPino from 'express-pino-logger';
 import * as helmet from 'helmet';
 import * as uuid from 'uuid';
@@ -11,12 +9,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
-import { DatabaseModule } from './database/database.module';
+import { LibModule } from './lib/lib.module';
 import { LoggerModule } from './logger/logger.module';
 import { LogService } from './logger/logger.service';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [ConfigModule, DatabaseModule, LoggerModule.forRoot()],
+  imports: [ConfigModule, LoggerModule.forRoot(), UsersModule, LibModule],
   controllers: [AppController],
   providers: [AppService],
 })
@@ -38,7 +37,6 @@ export class AppModule implements NestModule {
         }), // Request logger
         cookieParser(), // Cookie parser for csurf
         helmet(), // Security headers
-        csurf({ cookie: true }), // CSRF token to requests
         cors({
           origin: (origin: string, callback: (err: Error | null, allow?: boolean) => void) => {
             // Origins init
