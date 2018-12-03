@@ -66,7 +66,8 @@ export class AuthService {
    * @returns {Promise<User>} owner of JWT
    * @memberof AuthService
    */
-  public async verify(payload: Payload): Promise<User> {
+  public async verify(token: string): Promise<User> {
+    const payload = this._jwtService.verify<Payload>(token);
     return await this._usersService.findOne({ _id: payload._id });
   }
 

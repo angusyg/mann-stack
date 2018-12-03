@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, Post, ValidationPipe } from '@nestjs/c
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
-import { Tokens } from './interfaces/tokens.interface';
+import { Tokens } from '../common/interfaces/tokens.interface';
 import { User } from './interfaces/user.interface';
 import { UsersService } from './users.service';
 
