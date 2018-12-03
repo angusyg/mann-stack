@@ -1,10 +1,23 @@
-import { Document } from 'src/app/lib/interfaces/document.interface';
+import { Document } from '../../common/interfaces';
 
+/**
+ * User possible roles
+ *
+ * @export
+ * @enum {string}
+ */
 export enum UserRole {
   ADMIN = 'ADMIN',
-  USER = 'USER'
+  USER = 'USER',
 }
 
+/**
+ * User informations
+ *
+ * @export
+ * @interface User
+ * @extends {Document}
+ */
 export interface User extends Document {
   /**
    * User login
@@ -45,4 +58,13 @@ export interface User extends Document {
    * @memberof User
    */
   refreshToken: string;
+
+  /**
+   * Compares a candidate password with user password
+   *
+   * @param {string} candidatePassword candidate password
+   * @return {Promise<boolean>} match result
+   * @memberof User
+   */
+  comparePassword: (candidatePassword: string) => Promise<boolean>;
 }

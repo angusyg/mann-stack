@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 
 export interface Document extends Document {
-  id: string;
+  _id: string;
 
   /**
    * Returns true if this document was modified, else false.

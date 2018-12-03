@@ -1,15 +1,10 @@
-import { DynamicModule, Global, Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 
-import { loggerProviders } from './logger.providers';
+import { Logger } from './logger.service';
 
 @Global()
-@Module({})
-export class LoggerModule {
-  public static forRoot(): DynamicModule {
-    return {
-      module: LoggerModule,
-      providers: [...loggerProviders],
-      exports: [...loggerProviders],
-    };
-  }
-}
+@Module({
+  providers: [Logger],
+  exports: [Logger],
+})
+export class LoggerModule {}

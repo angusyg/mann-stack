@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 
 import { User, UserRole } from '../interfaces/user.interface';
 
-// User schema
+// User mongoose schema
 export const UserSchema = new mongoose.Schema({
   login: {
     type: String,
@@ -39,7 +39,7 @@ UserSchema.index({ login: 1, email: 1 }, { unique: true });
  * Pre save hook, encrypts user password before persist
  *
  * @private
- * @param {NextFunction} next callback to pass control to next middleware
+ * @param {(...params: any) => void} next callback to pass control to next middleware
  * @memberof UserSchema
  */
 UserSchema.pre<User>('save', function(this: User, next: (...params: any) => void) {

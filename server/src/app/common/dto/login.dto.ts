@@ -1,5 +1,11 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
+/**
+ * Login endpoint DTO
+ *
+ * @export
+ * @class LoginDto
+ */
 export class LoginDto {
   @IsString()
   @IsNotEmpty()

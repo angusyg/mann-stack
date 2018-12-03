@@ -1,6 +1,7 @@
-import { LoggerService } from '@nestjs/common';
+import { Injectable, LoggerService } from '@nestjs/common';
 import * as pino from 'pino';
 
+import { LOG_ENABLED, LOG_LEVEL } from '../config/config.constants';
 import { ConfigService } from '../config/config.service';
 
 /**
@@ -10,6 +11,7 @@ import { ConfigService } from '../config/config.service';
  * @class Logger
  * @implements {LoggerService}
  */
+@Injectable()
 export class Logger implements LoggerService {
   /**
    * Pino logger instance
@@ -18,13 +20,13 @@ export class Logger implements LoggerService {
    * @type {*}
    * @memberof Logger
    */
-  private readonly logger: pino.Logger;
+  private readonly _logger: pino.Logger;
 
-  constructor(private configService: ConfigService) {
-    this.logger = pino({
+  constructor(private _configService: ConfigService) {
+    this._logger = pino({
       useLevelLabels: true,
-      enabled: this.configService.get('LOG_ENABLED'),
-      level: this.configService.get('LOG_LEVEL'),
+      enabled: this._configService.get(LOG_ENABLED),
+      level: this._configService.get(LOG_LEVEL),
     });
   }
 
@@ -35,7 +37,7 @@ export class Logger implements LoggerService {
    * @memberof Logger
    */
   public getLogger() {
-    return this.logger;
+    return this._logger;
   }
 
   /**
@@ -125,7 +127,7 @@ export class Logger implements LoggerService {
    * @memberof Logger
    */
   private doLog(level: pino.Level, message: string, data?: any) {
-    const child = this.logger.child({
+    const child = this._logger.child({
       caller: this.getCaller(),
       data: data ? (data instanceof Error ? data.stack : data) : undefined,
     });

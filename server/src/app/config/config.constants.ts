@@ -1,0 +1,16 @@
+export const NODE_ENV: string = 'NODE_ENV';
+export const PORT: string = 'PORT';
+export const DB_HOST: string = 'DB_HOST';
+export const DB_NAME: string = 'DB_NAME';
+export const LOG_LEVEL: string = 'LOG_LEVEL';
+export const LOG_ENABLED: string = 'LOG_ENABLED';
+export const CORS_ALLOWED_ORIGINS: string = 'CORS_ALLOWED_ORIGINS';
+export const CORS_ALLOWED_METHODS: string = 'CORS_ALLOWED_METHODS';
+export const CORS_ALLOWED_HEADERS: string = 'CORS_ALLOWED_HEADERS';
+export const CORS_EXPOSED_HEADERS: string = 'CORS_EXPOSED_HEADERS';
+export const CORS_CREDENTIALS: string = 'CORS_CREDENTIALS';
+export const CORS_MAX_AGE: string = 'CORS_MAX_AGE';
+export const CORS_PREFLIGHT_CONTINUE: string = 'CORS_PREFLIGHT_CONTINUE';
+export const CORS_OPTIONS_SUCCESSS_CODE: string = 'CORS_OPTIONS_SUCCESSS_CODE';
+export const JWT_SECRET: string = 'JWT_SECRET';
+export const JWT_EXPIRATION_DELAY: string = 'JWT_EXPIRATION_DELAY';

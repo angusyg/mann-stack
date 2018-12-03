@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-/**w
+/**
  * User creation endpoint DTO
  *
  * @export
