@@ -17,3 +17,4 @@ export const AUTH_COOKIE_NAME = 'auth';
 
 // Refresh cookie name
 export const REFRESH_COOKIE_NAME = 'refresh';
+

@@ -60,6 +60,27 @@ export class AuthService {
   }
 
   /**
+   *
+   *
+   * @param {string} token
+   * @returns {(Promise<Payload | string | { [key: string]: any } | null>)}
+   * @memberof AuthService
+   */
+  public async extractPayloadFromExpiredToken(token: string): Promise<Payload | string | { [key: string]: any } | null> {
+    try {
+      // Verifies token
+      return this._jwtService.verify<Payload>(token);
+    } catch (err) {
+      if (err.message === 'jwt expired') {
+        // If expired, decode
+        const decoded = this._jwtService.decode(token, { json: true });
+        if (decoded) return decoded;
+      }
+      return null;
+    }
+  }
+
+  /**
    * Searches for user from JWT payload
    *
    * @param {Payload} payload JWT payload
@@ -80,7 +101,7 @@ export class AuthService {
    * @returns {Promise<Tokens>} API tokens (access and refresh)
    * @memberof AuthService
    */
-  public async generateTokens(user: User): Promise<Tokens>  {
+  public async generateTokens(user: User): Promise<Tokens> {
     // Generates new refresh token for user
     user.refreshToken = uuid.v4();
     // Updates user with his new refresh token

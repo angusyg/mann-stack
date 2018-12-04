@@ -20,7 +20,7 @@ import { LocalStrategy } from './passport/local.strategy';
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthService, CookieStrategy, LocalStrategy],
+  providers: [AuthService, CookieStrategy, LocalStrategy, CsrfStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}
