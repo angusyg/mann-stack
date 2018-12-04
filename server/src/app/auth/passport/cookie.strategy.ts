@@ -1,51 +1,66 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-cookie';
+import { AUTH_COOKIE_NAME } from 'src/app/common/constants';
+import { Logger } from 'src/app/logger/logger.service';
 import { User } from 'src/app/users/interfaces/user.interface';
 
 import { AuthService } from '../auth.service';
 
+/**
+ * Passport cookie strategy
+ * Based on auth cookie, containing JWT access token
+ *
+ * @export
+ * @class CookieStrategy
+ * @extends {PassportStrategy(Strategy)}
+ */
 @Injectable()
 export class CookieStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly _authService: AuthService) {
+  constructor(private readonly _authService: AuthService, private readonly _logger: Logger) {
     super({
-      cookieName: 'auth',
-      signed: true,
+      cookieName: AUTH_COOKIE_NAME,
       passReqToCallback: false,
     });
   }
 
-  public async validate(token: string, done: (error: Error | null, user: boolean | User) => void) {
+  /**
+   * Validates token extracted from cookie
+   * Verifies token and tries to retrieve associated user from database
+   *
+   * @param {string} token access token extracted from cookie
+   * @param {((error: Error | null, user: boolean | User) => void)} done callback function
+   * @returns {Promise<void>}
+   * @memberof CookieStrategy
+   */
+  public async validate(token: string, done: (error: Error | null, user: boolean | User) => void): Promise<void> {
     try {
+      // Verifies token and extracts user from db
       const signedUser = await this._authService.verify(token);
-      return done(null, signedUser || false);
+      // If no user found, send error
+      if (!signedUser) return done(new UnauthorizedException('USER_NOT_FOUND'), false);
+      // send logged user
+      return done(null, signedUser);
     } catch (err) {
-      done(err, false);
+      // Converts error message to request result message
+      this._logger.error('Error while verifying JWT token', err.message);
+      let message;
+      switch (err.message) {
+        case 'No auth token':
+        case 'invalid signature':
+        case 'jwt malformed':
+        case 'invalid token':
+        case 'invalid signature':
+          message = 'INVALID_TOKEN';
+          break;
+        case 'jwt expired':
+          message = 'EXPIRED_TOKEN';
+          break;
+        default:
+          message = 'TOKEN_ERROR';
+          break;
+      }
+      return done(new UnauthorizedException(message), false);
     }
   }
 }
-
-const callback = (err, user, info) => {
-  let message;
-  if (err) {
-    return err || new UnauthorizedException(info.message);
-  } else if (typeof info !== 'undefined' || !user) {
-    switch (info.message) {
-      case 'No auth token':
-      case 'invalid signature':
-      case 'jwt malformed':
-      case 'invalid token':
-      case 'invalid signature':
-        message = 'You must provide a valid authenticated access token';
-        break;
-      case 'jwt expired':
-        message = 'Your session has expired';
-        break;
-      default:
-        message = info.message;
-        break;
-    }
-    throw new UnauthorizedException(message);
-  }
-  return user;
-};

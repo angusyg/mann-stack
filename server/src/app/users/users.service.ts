@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
+import { USER_MODEL_TOKEN } from '../common/constants';
 import { CreateUserDto } from '../common/dto';
 import { Logger } from '../logger/logger.service';
 
 import { User } from './interfaces/user.interface';
-import { USER_MODEL_TOKEN } from './users.constants';
 
 /**
  * Service to handle User resource
