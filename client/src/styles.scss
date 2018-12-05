@@ -1,8 +1,6 @@
 html,
 body {
-  background-image: url('assets/img/background.png');
-  background-position: center;
-  background-repeat: no-repeat;
+  background: url('assets/img/background.png') no-repeat center fixed;
   background-size: cover;
   height: 100%;
   margin: 0;
