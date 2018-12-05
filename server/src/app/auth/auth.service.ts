@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import * as uuid from 'uuid';
 
-import { CreateUserDto, LoginDto } from '../common/dto';
+import { CreateUserDto } from '../common/dto';
 import { Payload, Tokens } from '../common/interfaces';
 import { JWT_EXPIRATION_DELAY } from '../config/config.constants';
 import { ConfigService } from '../config/config.service';
@@ -11,6 +11,12 @@ import { Logger } from '../logger/logger.service';
 import { User } from '../users/interfaces/user.interface';
 import { UsersService } from '../users/users.service';
 
+/**
+ * Service to handle user creation and authentication
+ *
+ * @export
+ * @class AuthService
+ */
 @Injectable()
 export class AuthService {
   constructor(
@@ -24,20 +30,14 @@ export class AuthService {
    * Signs up a new user
    *
    * @param {CreateUserDto} user new user
-   * @returns
+   * @returns {Promise<Tokens>} API tokens (access and refresh tokens)
    * @memberof AuthService
    */
   public async signUp(createUserDto: CreateUserDto): Promise<Tokens> {
     this._logger.debug(`Creating new user with ${{ login: createUserDto.login, email: createUserDto.email }}`);
+    // Creates new user in db
     const newUser = await this._usersService.create(createUserDto);
-    newUser.refreshToken = uuid.v4();
-    // Updates user with his new refresh token
-    await (newUser as Model<User>).save();
-    // Returns with tokens
-    return {
-      refreshToken: newUser.refreshToken,
-      accessToken: await this.generateAccessToken(newUser),
-    };
+    return await this.generateTokens(newUser);
   }
 
   /**
@@ -60,25 +60,67 @@ export class AuthService {
   }
 
   /**
-   * Searchs for user from JWT payload
+   *
+   *
+   * @param {string} token
+   * @returns {(Promise<Payload | string | { [key: string]: any } | null>)}
+   * @memberof AuthService
+   */
+  public async extractPayloadFromExpiredToken(token: string): Promise<Payload | string | { [key: string]: any } | null> {
+    try {
+      // Verifies token
+      return this._jwtService.verify<Payload>(token);
+    } catch (err) {
+      if (err.message === 'jwt expired') {
+        // If expired, decode
+        const decoded = this._jwtService.decode(token, { json: true });
+        if (decoded) return decoded;
+      }
+      return null;
+    }
+  }
+
+  /**
+   * Searches for user from JWT payload
    *
    * @param {Payload} payload JWT payload
    * @returns {Promise<User>} owner of JWT
    * @memberof AuthService
    */
   public async verify(token: string): Promise<User> {
+    // Verifies token
     const payload = this._jwtService.verify<Payload>(token);
+    // Extracts user from db with _id in token
     return await this._usersService.findOne({ _id: payload._id });
   }
 
   /**
    * Generates an access token with user infos
    *
-   * @param {User} user
-   * @returns {Promise<string>}
+   * @param {User} user user associated to token to create
+   * @returns {Promise<Tokens>} API tokens (access and refresh)
    * @memberof AuthService
    */
-  public async generateAccessToken(user: User): Promise<string> {
+  public async generateTokens(user: User): Promise<Tokens> {
+    // Generates new refresh token for user
+    user.refreshToken = uuid.v4();
+    // Updates user with his new refresh token
+    await (user as Model<User>).save();
+    // Returns with tokens
+    return {
+      refreshToken: user.refreshToken,
+      accessToken: await this.generateAccessToken(user),
+    };
+  }
+
+  /**
+   * Generates an access token with user infos
+   *
+   * @param {User} user user associated to token to create
+   * @returns {Promise<string>} JWT access token as string
+   * @memberof AuthService
+   */
+  private async generateAccessToken(user: User): Promise<string> {
     this._logger.debug(`Generating access token for user with login '${user.login}'`);
     return this._jwtService.sign(
       {

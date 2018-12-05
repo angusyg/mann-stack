@@ -1,9 +1,8 @@
 import { Connection } from 'mongoose';
 
-import { DB_CONNECTION_TOKEN } from '../common/constants';
+import { DB_CONNECTION_TOKEN, USER_MODEL_TOKEN } from '../common/constants';
 
 import { UserSchema } from './schemas/user.schema';
-import { USER_MODEL_TOKEN } from './users.constants';
 
 export const usersProviders = [
   {

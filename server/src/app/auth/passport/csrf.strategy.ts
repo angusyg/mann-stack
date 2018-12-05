@@ -16,11 +16,11 @@ import { AuthService } from '../auth.service';
  * @extends {PassportStrategy(Strategy)}
  */
 @Injectable()
-export class CookieStrategy extends PassportStrategy(Strategy) {
+export class CsrfStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly _authService: AuthService, private readonly _logger: Logger) {
     super({
       cookieName: AUTH_COOKIE_NAME,
-      passReqToCallback: false,
+      passReqToCallback: true,
     });
   }
 
@@ -33,7 +33,7 @@ export class CookieStrategy extends PassportStrategy(Strategy) {
    * @returns {Promise<void>}
    * @memberof CookieStrategy
    */
-  public async validate(token: string, done: (error: Error | null, user: boolean | User) => void): Promise<void> {
+  public async validate(req: any, token: string, done: (error: Error | null, user: boolean | User) => void): Promise<void> {
     try {
       // Verifies token and extracts user from db
       const signedUser = await this._authService.verify(token);
