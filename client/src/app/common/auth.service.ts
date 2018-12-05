@@ -6,6 +6,8 @@ import { map } from 'rxjs/operators';
 import { APP_CONFIG } from '../app-config.module';
 import { AppConfig } from '../models/app-config.model';
 
+import { LoginDto } from './dtos/login.dto';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -19,8 +21,8 @@ export class AuthService {
    * @returns {Observable<any>}
    * @memberof AuthService
    */
-  public login(infos: any): Observable<any> {
-    return this._http.post<any>(`${this._config.apiEndpoint}/login`, infos).pipe(
+  public login(infos: LoginDto): Observable<any> {
+    return this._http.post<LoginDto>(`${this._config.apiEndpoint}/login`, infos).pipe(
       map(tokens => {
         localStorage.setItem('accessToken', tokens.accessToken);
         localStorage.setItem('refreshToken', tokens.refreshToken);
