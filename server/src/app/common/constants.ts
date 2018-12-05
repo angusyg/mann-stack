@@ -11,10 +11,3 @@ export const USER_MODEL_TOKEN = 'UserModelToken';
 
 // Path to folder with env configurations
 export const ENV_FOLDER = path.join(__dirname, '../../environments/');
-
-// Authentication cookie name
-export const AUTH_COOKIE_NAME = 'auth';
-
-// Refresh cookie name
-export const REFRESH_COOKIE_NAME = 'refresh';
-

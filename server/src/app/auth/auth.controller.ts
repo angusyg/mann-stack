@@ -1,37 +1,63 @@
-import { Body, Controller, HttpStatus, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 
-import { AUTH_COOKIE_NAME, REFRESH_COOKIE_NAME } from '../common/constants';
 import { CreateUserDto } from '../common/dto';
+import { AUTH_COOKIE_NAME } from '../config/config.constants';
+import { ConfigService } from '../config/config.service';
 
 import { AuthService } from './auth.service';
+import { CookieAuthGuard } from './guards/cookie.guard';
 import { LocalAuthGuard } from './guards/local.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly _authService: AuthService) {}
+  /**
+   * Authentication cookie name
+   *
+   * @private
+   * @type {string}
+   * @memberof AuthController
+   */
+  private authCookieName: string;
 
+  constructor(private readonly _authService: AuthService, private _configService: ConfigService) {
+    this.authCookieName = this._configService.get(AUTH_COOKIE_NAME);
+  }
+
+  /**
+   * Signs up a new user with its informations
+   *
+   * @param {Response} res response to send
+   * @param {CreateUserDto} user user credentials
+   * @returns {Promise<void>}
+   * @memberof AuthController
+   */
   @Post('signup')
   public async signUp(@Res() res, @Body(ValidationPipe) user: CreateUserDto): Promise<void> {
-    const tokens = await this._authService.signUp(user);
-    res.cookie(AUTH_COOKIE_NAME, tokens.accessToken, { httpOnly: true });
-    res.cookie(REFRESH_COOKIE_NAME, tokens.refreshToken, { httpOnly: false });
+    res.cookie(this.authCookieName, await this._authService.signUp(user), { httpOnly: true });
     res.status(HttpStatus.NO_CONTENT).send();
   }
 
+  /**
+   * Logs in a user with its credentials
+   *
+   * @returns {Promise<void>}
+   * @memberof AuthController
+   */
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  public async login(@Req() req, @Res() res): Promise<void> {
-    const tokens = await this._authService.generateTokens(req.user);
-    res.cookie(AUTH_COOKIE_NAME, tokens.accessToken, { httpOnly: true });
-    res.cookie(REFRESH_COOKIE_NAME, tokens.refreshToken, { httpOnly: false });
-    res.status(HttpStatus.NO_CONTENT).send();
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async login(): Promise<void> {
+    // res.cookie(this._configService.get(CSRF_COOKIE_NAME), req.)
   }
 
+  /**
+   * Refreshes an expired access token
+   *
+   * @returns {Promise<void>}
+   * @memberof AuthController
+   */
   @Post('refresh')
-  public async login(@Req() req, @Res() res): Promise<void> {
-    const tokens = await this._authService.generateTokens(req.user);
-    res.cookie(AUTH_COOKIE_NAME, tokens.accessToken, { httpOnly: true });
-    res.cookie(REFRESH_COOKIE_NAME, tokens.refreshToken, { httpOnly: false });
-    res.status(HttpStatus.NO_CONTENT).send();
-  }
+  @UseGuards(CookieAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async refresh(): Promise<void> {}
 }

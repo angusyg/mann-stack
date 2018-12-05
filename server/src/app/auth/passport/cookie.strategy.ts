@@ -1,7 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-cookie';
-import { AUTH_COOKIE_NAME } from 'src/app/common/constants';
+import { AUTH_COOKIE_NAME } from 'src/app/config/config.constants';
+import { ConfigService } from 'src/app/config/config.service';
 import { Logger } from 'src/app/logger/logger.service';
 import { User } from 'src/app/users/interfaces/user.interface';
 
@@ -17,9 +18,10 @@ import { AuthService } from '../auth.service';
  */
 @Injectable()
 export class CookieStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly _authService: AuthService, private readonly _logger: Logger) {
+  // @ts-ignore: noUnusedLocals
+  constructor(private _configService: ConfigService, private readonly _authService: AuthService, private readonly _logger: Logger) {
     super({
-      cookieName: AUTH_COOKIE_NAME,
+      cookieName: _configService.get(AUTH_COOKIE_NAME),
       passReqToCallback: false,
     });
   }
@@ -39,23 +41,21 @@ export class CookieStrategy extends PassportStrategy(Strategy) {
       const signedUser = await this._authService.verify(token);
       // If no user found, send error
       if (!signedUser) return done(new UnauthorizedException('USER_NOT_FOUND'), false);
-      // send logged user
+      // Sends logged user
       return done(null, signedUser);
     } catch (err) {
       // Converts error message to request result message
       this._logger.error('Error while verifying JWT token', err.message);
       let message;
       switch (err.message) {
+        case 'jwt expired':
+          message = 'EXPIRED_TOKEN';
+          break;
         case 'No auth token':
         case 'invalid signature':
         case 'jwt malformed':
         case 'invalid token':
         case 'invalid signature':
-          message = 'INVALID_TOKEN';
-          break;
-        case 'jwt expired':
-          message = 'EXPIRED_TOKEN';
-          break;
         default:
           message = 'TOKEN_ERROR';
           break;

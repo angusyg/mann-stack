@@ -11,6 +11,7 @@ async function bootstrap() {
   // Logger configuration
   app.useLogger(app.get<Logger>(Logger));
   app.useGlobalFilters(new MongoExceptionFilter());
+  //app.useGlobalFilters(new AllExceptionFilter(app.get(HTTP_SERVER_REF)))
   await app.listen(app.get<ConfigService>(ConfigService).get(PORT));
 }
 bootstrap();

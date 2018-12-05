@@ -1,6 +1,10 @@
 import * as Joi from 'joi';
 
 import {
+  AUTH_COOKIE_MAXAGE,
+  AUTH_COOKIE_NAME,
+  AUTH_JWT_EXPIRATION_DELAY,
+  AUTH_JWT_SECRET,
   CORS_ALLOWED_HEADERS,
   CORS_ALLOWED_METHODS,
   CORS_ALLOWED_ORIGINS,
@@ -9,10 +13,9 @@ import {
   CORS_MAX_AGE,
   CORS_OPTIONS_SUCCESSS_CODE,
   CORS_PREFLIGHT_CONTINUE,
+  CSRF_COOKIE_NAME,
   DB_HOST,
   DB_NAME,
-  JWT_EXPIRATION_DELAY,
-  JWT_SECRET,
   LOG_ENABLED,
   LOG_LEVEL,
   NODE_ENV,
@@ -47,6 +50,9 @@ export const ENV_SCHEMA: Joi.ObjectSchema = Joi.object({
   [CORS_MAX_AGE]: Joi.number().default(60 * 10),
   [CORS_PREFLIGHT_CONTINUE]: Joi.boolean().default(false),
   [CORS_OPTIONS_SUCCESSS_CODE]: Joi.number().default(204),
-  [JWT_SECRET]: Joi.string().default('JWTSecret'),
-  [JWT_EXPIRATION_DELAY]: Joi.number().default(60 * 10),
+  [AUTH_JWT_SECRET]: Joi.string().default('JWTSecret'),
+  [AUTH_JWT_EXPIRATION_DELAY]: Joi.number().default(60 * 10),
+  [AUTH_COOKIE_NAME]: Joi.string().default('auth'),
+  [AUTH_COOKIE_MAXAGE]: Joi.number().default(1000 * 60 * 60 * 24 * 30),
+  [CSRF_COOKIE_NAME]: Joi.string().default('XSRF-TOKEN'),
 });

@@ -1,5 +1,3 @@
-import { UserRole } from 'src/app/users/interfaces/user.interface';
-
 export interface Payload {
   /**
    * User id
@@ -18,10 +16,10 @@ export interface Payload {
   login: string;
 
   /**
-   * User roles
+   * User refresh token
    *
-   * @type {UserRole[]}
+   * @type {string}
    * @memberof Payload
    */
-  roles: UserRole[];
+  refresh: string;
 }

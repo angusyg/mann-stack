@@ -4,8 +4,8 @@ import { Model } from 'mongoose';
 import * as uuid from 'uuid';
 
 import { CreateUserDto } from '../common/dto';
-import { Payload, Tokens } from '../common/interfaces';
-import { JWT_EXPIRATION_DELAY } from '../config/config.constants';
+import { Payload } from '../common/interfaces';
+import { AUTH_JWT_EXPIRATION_DELAY } from '../config/config.constants';
 import { ConfigService } from '../config/config.service';
 import { Logger } from '../logger/logger.service';
 import { User } from '../users/interfaces/user.interface';
@@ -30,14 +30,14 @@ export class AuthService {
    * Signs up a new user
    *
    * @param {CreateUserDto} user new user
-   * @returns {Promise<Tokens>} API tokens (access and refresh tokens)
+   * @returns {Promise<string>} API access token
    * @memberof AuthService
    */
-  public async signUp(createUserDto: CreateUserDto): Promise<Tokens> {
+  public async signUp(createUserDto: CreateUserDto): Promise<string> {
     this._logger.debug(`Creating new user with ${{ login: createUserDto.login, email: createUserDto.email }}`);
     // Creates new user in db
     const newUser = await this._usersService.create(createUserDto);
-    return await this.generateTokens(newUser);
+    return await this.getAccessToken(newUser);
   }
 
   /**
@@ -60,27 +60,6 @@ export class AuthService {
   }
 
   /**
-   *
-   *
-   * @param {string} token
-   * @returns {(Promise<Payload | string | { [key: string]: any } | null>)}
-   * @memberof AuthService
-   */
-  public async extractPayloadFromExpiredToken(token: string): Promise<Payload | string | { [key: string]: any } | null> {
-    try {
-      // Verifies token
-      return this._jwtService.verify<Payload>(token);
-    } catch (err) {
-      if (err.message === 'jwt expired') {
-        // If expired, decode
-        const decoded = this._jwtService.decode(token, { json: true });
-        if (decoded) return decoded;
-      }
-      return null;
-    }
-  }
-
-  /**
    * Searches for user from JWT payload
    *
    * @param {Payload} payload JWT payload
@@ -98,19 +77,36 @@ export class AuthService {
    * Generates an access token with user infos
    *
    * @param {User} user user associated to token to create
-   * @returns {Promise<Tokens>} API tokens (access and refresh)
+   * @returns {Promise<string>} API access token
    * @memberof AuthService
    */
-  public async generateTokens(user: User): Promise<Tokens> {
+  public async getAccessToken(user: User): Promise<string> {
     // Generates new refresh token for user
     user.refreshToken = uuid.v4();
     // Updates user with his new refresh token
     await (user as Model<User>).save();
     // Returns with tokens
-    return {
-      refreshToken: user.refreshToken,
-      accessToken: await this.generateAccessToken(user),
-    };
+    return this.generateAccessToken(user, user.refreshToken);
+  }
+
+  /**
+   * Refreshes and expired access token
+   *
+   * @param {string} token expired access token to refresh
+   * @returns {Promise<string>} new ccess token
+   * @memberof AuthService
+   */
+  public async refreshAccessToken(token: string): Promise<string> {
+    // Decodes access token
+    const payload = this._jwtService.decode(token, { json: true }) as Payload;
+    if (payload) {
+      // Searches for user with login and refresh token extracted from expired access token
+      const user = await this._usersService.findOne({ _id: payload._id, refreshToken: payload.refresh });
+      // If no user found, rejects
+      if (!user) throw new UnauthorizedException('INVALID_REFRESH_TOKEN');
+      // Generates new access token
+      return this.getAccessToken(user);
+    } throw new UnauthorizedException('INVALID_TOKEN');
   }
 
   /**
@@ -120,15 +116,15 @@ export class AuthService {
    * @returns {Promise<string>} JWT access token as string
    * @memberof AuthService
    */
-  private async generateAccessToken(user: User): Promise<string> {
+  private generateAccessToken(user: User, refreshToken: string): string {
     this._logger.debug(`Generating access token for user with login '${user.login}'`);
     return this._jwtService.sign(
       {
         _id: user._id,
         login: user.login,
-        roles: user.roles,
+        refresh: refreshToken,
       },
-      { expiresIn: this._configService.get(JWT_EXPIRATION_DELAY) }
+      { expiresIn: this._configService.get(AUTH_JWT_EXPIRATION_DELAY) }
     );
   }
 }
