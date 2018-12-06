@@ -34,7 +34,7 @@ export class AuthModule {
   public configure(consumer: MiddlewareConsumer): void {
     consumer
       .apply(CsurfMiddleware)
-      .exclude({ path: 'auth/signup', method: RequestMethod.POST }, { path: 'auth/login', method: RequestMethod.POST })
+      .exclude({ path: 'api/auth/signup', method: RequestMethod.POST }, { path: 'api/auth/login', method: RequestMethod.POST })
       .forRoutes(AuthController);
   }
 }

@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import * as mongoose from 'mongoose';
 
-import { User, UserRole } from '../interfaces/user.interface';
+import { User, UserRole, UserStatus } from '../../common/interfaces/user.interface';
 
 // User mongoose schema
 export const UserSchema = new mongoose.Schema({
@@ -30,6 +30,14 @@ export const UserSchema = new mongoose.Schema({
   refreshToken: {
     type: String,
   },
+  status: {
+    type: String,
+    required: true,
+    default: [UserStatus.INACTIVE],
+  },
+  confirmToken: {
+    type: String,
+  }
 });
 
 // Creates index for unique constraints on login and email

@@ -1,11 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-cookie';
-import { AUTH_COOKIE_NAME } from 'src/app/config/config.constants';
-import { ConfigService } from 'src/app/config/config.service';
-import { Logger } from 'src/app/logger/logger.service';
-import { User } from 'src/app/users/interfaces/user.interface';
 
+import { AUTH_COOKIE_NAME } from '../../config/config.constants';
+import { ConfigService } from '../../config/config.service';
+import { Logger } from '../../logger/logger.service';
+import { User } from '../../common/interfaces/user.interface';
 import { AuthService } from '../auth.service';
 
 /**
@@ -19,7 +19,7 @@ import { AuthService } from '../auth.service';
 @Injectable()
 export class CookieStrategy extends PassportStrategy(Strategy) {
   // @ts-ignore: noUnusedLocals
-  constructor(private _configService: ConfigService, private readonly _authService: AuthService, private readonly _logger: Logger) {
+  constructor(private readonly _configService: ConfigService, private readonly _authService: AuthService, private readonly _logger: Logger) {
     super({
       cookieName: _configService.get(AUTH_COOKIE_NAME),
       passReqToCallback: false,

@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Res, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 
 import { CreateUserDto } from '../common/dto';
 import { AUTH_COOKIE_NAME } from '../config/config.constants';
@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 import { CookieAuthGuard } from './guards/cookie.guard';
 import { LocalAuthGuard } from './guards/local.guard';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   /**
    * Authentication cookie name
@@ -17,10 +17,10 @@ export class AuthController {
    * @type {string}
    * @memberof AuthController
    */
-  private authCookieName: string;
+  private _authCookieName: string;
 
-  constructor(private readonly _authService: AuthService, private _configService: ConfigService) {
-    this.authCookieName = this._configService.get(AUTH_COOKIE_NAME);
+  constructor(private readonly _authService: AuthService, private readonly _configService: ConfigService) {
+    this._authCookieName = this._configService.get(AUTH_COOKIE_NAME);
   }
 
   /**
@@ -33,8 +33,20 @@ export class AuthController {
    */
   @Post('signup')
   public async signUp(@Res() res, @Body(ValidationPipe) user: CreateUserDto): Promise<void> {
-    res.cookie(this.authCookieName, await this._authService.signUp(user), { httpOnly: true });
+    res.cookie(this._authCookieName, await this._authService.signUp(user), { httpOnly: true });
     res.status(HttpStatus.NO_CONTENT).send();
+  }
+
+  /**
+   * Confirms user email
+   *
+   * @param {string} token confirmation token
+   * @returns {Promise<void>}
+   * @memberof AuthController
+   */
+  @Get('confirm/:token')
+  public async confirmEmail(@Param('token') token): Promise<void> {
+    await this._authService.confirmEmail(token);
   }
 
   /**
@@ -46,9 +58,7 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  public async login(): Promise<void> {
-    // res.cookie(this._configService.get(CSRF_COOKIE_NAME), req.)
-  }
+  public async login(): Promise<void> {}
 
   /**
    * Refreshes an expired access token

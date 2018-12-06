@@ -18,8 +18,11 @@ import {
   DB_NAME,
   LOG_ENABLED,
   LOG_LEVEL,
+  MAIL_PASSWORD,
+  MAIL_USER,
   NODE_ENV,
   PORT,
+  URL,
 } from '../config.constants';
 
 // Environment configuration schema object
@@ -27,6 +30,7 @@ export const ENV_SCHEMA: Joi.ObjectSchema = Joi.object({
   [NODE_ENV]: Joi.string()
     .valid(['development', 'production', 'test'])
     .default('development'),
+  [URL]: Joi.string().default('http://localhost:3000'),
   [PORT]: Joi.number().default(3000),
   [DB_HOST]: Joi.string().default('localhost:27017'),
   [DB_NAME]: Joi.string().default('mann'),
@@ -55,4 +59,6 @@ export const ENV_SCHEMA: Joi.ObjectSchema = Joi.object({
   [AUTH_COOKIE_NAME]: Joi.string().default('auth'),
   [AUTH_COOKIE_MAXAGE]: Joi.number().default(1000 * 60 * 60 * 24 * 30),
   [CSRF_COOKIE_NAME]: Joi.string().default('XSRF-TOKEN'),
+  [MAIL_USER]: Joi.string(),
+  [MAIL_PASSWORD]: Joi.string(),
 });

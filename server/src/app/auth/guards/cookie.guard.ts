@@ -1,8 +1,8 @@
 import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AUTH_COOKIE_MAXAGE, AUTH_COOKIE_NAME } from 'src/app/config/config.constants';
-import { ConfigService } from 'src/app/config/config.service';
 
+import { AUTH_COOKIE_MAXAGE, AUTH_COOKIE_NAME } from '../../config/config.constants';
+import { ConfigService } from '../../config/config.service';
 import { AuthService } from '../auth.service';
 
 /**
@@ -14,7 +14,7 @@ import { AuthService } from '../auth.service';
  */
 @Injectable()
 export class CookieAuthGuard extends AuthGuard('cookie') {
-  constructor(private _configService: ConfigService, private _authService: AuthService) {
+  constructor(private readonly _configService: ConfigService, private readonly _authService: AuthService) {
     super();
   }
 

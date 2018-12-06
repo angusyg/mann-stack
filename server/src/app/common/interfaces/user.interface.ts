@@ -1,4 +1,4 @@
-import { Document } from '../../common/interfaces';
+import { Document } from '.';
 
 /**
  * User possible roles
@@ -9,6 +9,17 @@ import { Document } from '../../common/interfaces';
 export enum UserRole {
   ADMIN = 'ADMIN',
   USER = 'USER',
+}
+
+/**
+ * User status
+ *
+ * @export
+ * @enum {string}
+ */
+export enum UserStatus {
+  INACTIVE = 'INACTIVE',
+  ACTIVE = 'ACTIVE',
 }
 
 /**
@@ -58,6 +69,22 @@ export interface User extends Document {
    * @memberof User
    */
   refreshToken: string;
+
+  /**
+   * User status
+   *
+   * @type {UserStatus}
+   * @memberof User
+   */
+  status: UserStatus;
+
+  /**
+   * User email confirmation token
+   *
+   * @type {string}
+   * @memberof User
+   */
+  confirmToken: string;
 
   /**
    * Compares a candidate password with user password

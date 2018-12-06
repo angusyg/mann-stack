@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { DB_CONNECTION_TOKEN } from '../common/constants';
+import { DB_CONNECTION_TOKEN } from '../common/common.constants';
 import { DB_HOST, DB_NAME } from '../config/config.constants';
 import { ConfigService } from '../config/config.service';
 

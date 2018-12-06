@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as Joi from 'joi';
 import * as path from 'path';
 
-import { ENV_FOLDER } from '../common/constants';
+import { ENV_FOLDER } from '../common/common.constants';
 
 import { ENV_SCHEMA } from './schemas/config.schema';
 

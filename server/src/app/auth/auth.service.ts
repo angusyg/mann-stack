@@ -1,14 +1,16 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as crypto from 'crypto';
 import { Model } from 'mongoose';
 import * as uuid from 'uuid';
 
 import { CreateUserDto } from '../common/dto';
 import { Payload } from '../common/interfaces';
-import { AUTH_JWT_EXPIRATION_DELAY } from '../config/config.constants';
+import { MailService } from '../common/providers/mail.service';
+import { AUTH_JWT_EXPIRATION_DELAY, MAIL_USER, URL } from '../config/config.constants';
 import { ConfigService } from '../config/config.service';
 import { Logger } from '../logger/logger.service';
-import { User } from '../users/interfaces/user.interface';
+import { User, UserStatus } from '../common/interfaces/user.interface';
 import { UsersService } from '../users/users.service';
 
 /**
@@ -21,9 +23,10 @@ import { UsersService } from '../users/users.service';
 export class AuthService {
   constructor(
     private readonly _usersService: UsersService,
-    private _logger: Logger,
-    private _configService: ConfigService,
-    private readonly _jwtService: JwtService
+    private readonly _logger: Logger,
+    private readonly _configService: ConfigService,
+    private readonly _jwtService: JwtService,
+    private readonly _mailService: MailService
   ) {}
 
   /**
@@ -37,7 +40,17 @@ export class AuthService {
     this._logger.debug(`Creating new user with ${{ login: createUserDto.login, email: createUserDto.email }}`);
     // Creates new user in db
     const newUser = await this._usersService.create(createUserDto);
-    return await this.getAccessToken(newUser);
+    let token;
+    try {
+      // Sends confirmation email
+      token = await this.sendConfirmEmail(newUser);
+    } catch (err) {
+      // Deletes created user if error sending confirmation email
+      await this._usersService.deleteById(newUser._id);
+      throw err;
+    }
+    // Generates access token
+    return await this.getAccessToken(newUser, token);
   }
 
   /**
@@ -80,9 +93,11 @@ export class AuthService {
    * @returns {Promise<string>} API access token
    * @memberof AuthService
    */
-  public async getAccessToken(user: User): Promise<string> {
+  public async getAccessToken(user: User, token?: string): Promise<string> {
     // Generates new refresh token for user
     user.refreshToken = uuid.v4();
+    // If token passed, put it in user
+    if (token) user.confirmToken = token;
     // Updates user with his new refresh token
     await (user as Model<User>).save();
     // Returns with tokens
@@ -99,14 +114,33 @@ export class AuthService {
   public async refreshAccessToken(token: string): Promise<string> {
     // Decodes access token
     const payload = this._jwtService.decode(token, { json: true }) as Payload;
-    if (payload) {
-      // Searches for user with login and refresh token extracted from expired access token
-      const user = await this._usersService.findOne({ _id: payload._id, refreshToken: payload.refresh });
-      // If no user found, rejects
-      if (!user) throw new UnauthorizedException('INVALID_REFRESH_TOKEN');
-      // Generates new access token
-      return this.getAccessToken(user);
-    } throw new UnauthorizedException('INVALID_TOKEN');
+    if (!payload) throw new UnauthorizedException('INVALID_TOKEN');
+    // Searches for user with login and refresh token extracted from expired access token
+    const user = await this._usersService.findOne({ _id: payload._id, refreshToken: payload.refresh });
+    // If no user found, rejects
+    if (!user) throw new UnauthorizedException('INVALID_REFRESH_TOKEN');
+    // Generates new access token
+    return this.getAccessToken(user);
+  }
+
+  /**
+   * Confirms email of user with its token
+   *
+   * @param {string} token confirmation token
+   * @returns {Promise<void>}
+   * @memberof AuthService
+   */
+  public async confirmEmail(token: string): Promise<void> {
+    // Searches user associated to token
+    const user = await this._usersService.findOne({ confirmToken: token });
+    // If no user founds, rejects
+    if (!user) throw new UnauthorizedException('INVALID_CONFIRM_TOKEN');
+    // If user is not already activated
+    if (user.status === UserStatus.INACTIVE) {
+      // Updates user status
+      user.status = UserStatus.ACTIVE;
+      await (user as Model<User>).save();
+    }
   }
 
   /**
@@ -126,5 +160,28 @@ export class AuthService {
       },
       { expiresIn: this._configService.get(AUTH_JWT_EXPIRATION_DELAY) }
     );
+  }
+
+  /**
+   * Generates a token and sends it in an email for email verification
+   *
+   * @private
+   * @param {User} user user to verify email
+   * @returns {Promise<string>} generated token
+   * @memberof AuthService
+   */
+  private async sendConfirmEmail(user: User): Promise<string> {
+    // Generates a confirmation token
+    const token = crypto.randomBytes(48).toString('hex');
+    // Creates mail
+    const mailOptions = {
+      from: this._configService.get(MAIL_USER),
+      to: user.email,
+      subject: 'E-mail verification',
+      text: `Hi, To confirm you email <a href="${this._configService.get(URL)}/auth/confirm/${encodeURIComponent(token)}">Clik on this link</a>`,
+    };
+    // Sends mail
+    await this._mailService.sendMail(mailOptions);
+    return token;
   }
 }

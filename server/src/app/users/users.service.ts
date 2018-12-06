@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
-import { USER_MODEL_TOKEN } from '../common/constants';
+import { USER_MODEL_TOKEN } from '../common/common.constants';
 import { CreateUserDto } from '../common/dto';
 import { Logger } from '../logger/logger.service';
 
-import { User } from './interfaces/user.interface';
+import { User } from '../common/interfaces/user.interface';
 
 /**
  * Service to handle User resource
@@ -57,5 +57,15 @@ export class UsersService {
         .exec();
     }
     return await this._userModel.findOne(params).exec();
+  }
+
+  /**
+   * Finds a user by its id and deletes it
+   *
+   * @param {string} id user if
+   * @memberof UsersService
+   */
+  public async deleteById(id: string) {
+    await this._userModel.findByIdAndRemove(id).exec();
   }
 }
