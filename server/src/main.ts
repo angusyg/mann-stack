@@ -9,7 +9,7 @@ import { Logger } from './app/logger/services';
 
 
 /**
- * Bootstrap application
+ * Bootstraps application
  *
  */
 async function bootstrap() {
