@@ -1,13 +1,22 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Res } from '@nestjs/common';
+import { join } from 'path';
 
-import { AppService } from './app.service';
-
+/**
+ * Controller to serve index of client application
+ *
+ * @export
+ * @class AppController
+ */
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
-  @Get('/')
-  public root(): string {
-    return this.appService.root();
-  }
+    /**
+     * Returns index page for client app
+     *
+     * @param {*} res response to send
+     * @memberof AppController
+     */
+    @Get()
+    public index(@Res() res): void {
+      res.sendFile(join(__dirname, '../../../client/src/index.html'));
+    }
 }

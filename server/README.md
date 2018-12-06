@@ -1,4 +1,4 @@
-# Mann Stack
+# Mann Stack Server Starter
 
 ## Description
 
