@@ -7,7 +7,6 @@ import { AllExceptionFilter } from './app/common/filters';
 import { ConfigService } from './app/config/services';
 import { Logger } from './app/logger/services';
 
-
 /**
  * Bootstraps application
  *
