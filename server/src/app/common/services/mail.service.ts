@@ -3,7 +3,8 @@ import { createTransport, SendMailOptions, Transporter } from 'nodemailer';
 import * as smtpTransport from 'nodemailer-smtp-transport';
 
 import { MAIL_PASSWORD, MAIL_USER } from '../../common/constants';
-import { ConfigService } from '../../config/services';
+
+import { ConfigService } from './config.service';
 
 /**
  * Service to send emails

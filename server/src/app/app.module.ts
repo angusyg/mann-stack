@@ -1,12 +1,10 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { RouterModule } from 'nest-router';
 
-import { AppController } from './app.controller';
-import { AuthModule } from './auth/auth.module';
+import { ApiModule } from './api/api.module';
+import { routes } from './app.routes';
+import { ClientModule } from './client/client.module';
 import { CommonModule } from './common/common.module';
-import { CookieParserMiddleware, CorsMiddleware, HelmetMiddleware, LoggingMiddleware } from './common/middlewares';
-import { ConfigModule } from './config/config.module';
-import { LoggerModule } from './logger/logger.module';
-import { UsersModule } from './users/users.module';
 
 /**
  * Application module
@@ -16,17 +14,6 @@ import { UsersModule } from './users/users.module';
  * @implements {NestModule}
  */
 @Module({
-  imports: [ConfigModule, LoggerModule, UsersModule, AuthModule, CommonModule],
-  controllers: [AppController],
+  imports: [RouterModule.forRoutes(routes), CommonModule, ClientModule, ApiModule],
 })
-export class AppModule implements NestModule {
-  /**
-   * Adds application midlewares for security and logging
-   *
-   * @param {MiddlewareConsumer} consumer
-   * @memberof AppModule
-   */
-  public configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(LoggingMiddleware, HelmetMiddleware, CorsMiddleware, CookieParserMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
-  }
-}
+export class AppModule {}

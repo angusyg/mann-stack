@@ -11,7 +11,7 @@ import {
   CORS_OPTIONS_SUCCESSS_CODE,
   CORS_PREFLIGHT_CONTINUE,
 } from '../../common/constants';
-import { ConfigService } from '../../config/services';
+import { ConfigService } from '../services';
 
 /**
  * Nest middleware for Express cors middleware

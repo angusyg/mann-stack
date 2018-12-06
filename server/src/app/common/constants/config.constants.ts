@@ -1,3 +1,9 @@
+import { join } from 'path';
+
+// Path to folder with env configurations
+export const ENV_FOLDER: string = join(__dirname, '../../../environments/');
+
+// Environment
 export const NODE_ENV: string = 'NODE_ENV';
 
 // App configuration
@@ -31,6 +37,7 @@ export const AUTH_MAIL_CONFIRMATION: string = 'AUTH_MAIL_CONFIRMATION';
 
 // CSRF configuration
 export const CSRF_COOKIE_NAME: string = 'CSRF_COOKIE_NAME';
+export const CSRF_COOKIE_MAXAGE: string = 'CSRF_COOKIE_MAXAGE';
 
 // Mailer configuration
 export const MAIL_USER: string = 'MAIL_USER';
@@ -39,3 +46,4 @@ export const MAIL_PASSWORD: string = 'MAIL_PASSWORD';
 // Static content configuration
 export const STATIC_SERVE: string = 'STATIC_SERVE';
 export const STATIC_PREFIX: string = 'STATIC_PREFIX';
+export const STATIC_FOLDER: string = 'STATIC_FOLDER';
