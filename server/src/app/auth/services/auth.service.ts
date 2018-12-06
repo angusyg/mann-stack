@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { randomBytes } from 'crypto';
 import * as uuid from 'uuid';
 
-import { AUTH_JWT_EXPIRATION_DELAY, MAIL_USER, URL } from '../../common/constants';
+import { AUTH_JWT_EXPIRATION_DELAY, AUTH_MAIL_CONFIRMATION, MAIL_USER, URL } from '../../common/constants';
 import { CreateUserDto } from '../../common/dtos';
 import { Payload } from '../../common/interfaces';
 import { User, UserStatus } from '../../common/interfaces';
@@ -39,17 +39,21 @@ export class AuthService {
     this._logger.debug(`Creating new user with ${{ login: createUserDto.login, email: createUserDto.email }}`);
     // Creates new user in db
     const newUser = await this._usersService.create(createUserDto);
-    let token;
-    try {
-      // Sends confirmation email
-      token = await this.sendConfirmEmail(newUser);
-    } catch (err) {
-      // Deletes created user if error sending confirmation email
-      await this._usersService.deleteById(newUser._id);
-      throw err;
+    if (this._configService.get(AUTH_MAIL_CONFIRMATION)) {
+      // Email verification, sends email and save confirmation token for user
+      try {
+        // Sends confirmation email
+        newUser.confirmToken = await this.sendConfirmEmail(newUser);
+      } catch (err) {
+        // Deletes created user if error sending confirmation email
+        await this._usersService.deleteById(newUser._id);
+        throw err;
+      }
     }
+    // If no email verification needed, activates account
+    else newUser.status = UserStatus.ACTIVE;
     // Generates access token
-    return await this.getAccessToken(newUser, token);
+    return await this.getAccessToken(newUser);
   }
 
   /**
@@ -92,11 +96,9 @@ export class AuthService {
    * @returns {Promise<string>} API access token
    * @memberof AuthService
    */
-  public async getAccessToken(user: User, token?: string): Promise<string> {
+  public async getAccessToken(user: User): Promise<string> {
     // Generates new refresh token for user
     user.refreshToken = uuid.v4();
-    // If token passed, put it in user
-    if (token) user.confirmToken = token;
     // Updates user with his new refresh token
     await user.save();
     // Returns with tokens
