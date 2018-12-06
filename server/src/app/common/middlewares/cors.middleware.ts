@@ -10,10 +10,16 @@ import {
   CORS_MAX_AGE,
   CORS_OPTIONS_SUCCESSS_CODE,
   CORS_PREFLIGHT_CONTINUE,
-} from '../../config/config.constants';
-import { ConfigService } from '../../config/config.service';
+} from '../../common/constants';
+import { ConfigService } from '../../config/services';
 
-@Injectable()
+/**
+ * Nest middleware for Express cors middleware
+ *
+ * @export
+ * @class CorsMiddleware
+ * @implements {NestMiddleware}
+ */@Injectable()
 export class CorsMiddleware implements NestMiddleware {
   constructor(private readonly _configService: ConfigService) {}
 

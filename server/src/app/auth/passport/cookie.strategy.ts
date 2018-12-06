@@ -2,11 +2,11 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-cookie';
 
-import { AUTH_COOKIE_NAME } from '../../config/config.constants';
-import { ConfigService } from '../../config/config.service';
-import { Logger } from '../../logger/logger.service';
-import { User } from '../../common/interfaces/user.interface';
-import { AuthService } from '../auth.service';
+import { AUTH_COOKIE_NAME } from '../../common/constants';
+import { User } from '../../common/interfaces';
+import { ConfigService } from '../../config/services';
+import { Logger } from '../../logger/services';
+import { AuthService } from '../services';
 
 /**
  * Passport cookie strategy

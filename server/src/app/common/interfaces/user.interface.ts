@@ -1,4 +1,4 @@
-import { Document } from '.';
+import { Document } from 'mongoose';
 
 /**
  * User possible roles

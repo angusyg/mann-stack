@@ -1,11 +1,10 @@
-import * as dotenv from 'dotenv';
-import * as fs from 'fs';
-import * as Joi from 'joi';
-import * as path from 'path';
+import { parse } from 'dotenv';
+import { readFileSync } from 'fs';
+import { validate } from 'joi';
+import { join } from 'path';
 
-import { ENV_FOLDER } from '../common/common.constants';
-
-import { ENV_SCHEMA } from './schemas/config.schema';
+import { ENV_FOLDER } from '../../common/constants';
+import { ENV_SCHEMA } from '../schemas';
 
 /**
  * Environment configuration map
@@ -31,13 +30,13 @@ export class ConfigService {
    * @type {EnvConfig}
    * @memberof ConfigService
    */
-  private readonly envConfig: EnvConfig;
+  private readonly _envConfig: EnvConfig;
 
   constructor() {
     // Load of environment configuration
-    const config = dotenv.parse(fs.readFileSync(path.join(ENV_FOLDER, `${process.env.NODE_ENV}.env`)));
+    const config = parse(readFileSync(join(ENV_FOLDER, `${process.env.NODE_ENV}.env`)));
     // Validation of configuration values
-    this.envConfig = this.validateInput(config);
+    this._envConfig = this.validateInput(config);
   }
 
   /**
@@ -48,7 +47,7 @@ export class ConfigService {
    * @memberof ConfigService
    */
   public get(key: string): any {
-    return this.envConfig[key];
+    return this._envConfig[key];
   }
 
   /**
@@ -62,7 +61,7 @@ export class ConfigService {
    * @memberof ConfigService
    */
   private validateInput(envConfig: EnvConfig): EnvConfig {
-    const { error, value: validatedEnvConfig } = Joi.validate(envConfig, ENV_SCHEMA);
+    const { error, value: validatedEnvConfig } = validate(envConfig, ENV_SCHEMA);
     if (error) throw new Error(`Config validation error: ${error.message}`);
     return validatedEnvConfig;
   }

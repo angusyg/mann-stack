@@ -1,9 +1,9 @@
 import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
-import { AUTH_COOKIE_MAXAGE, AUTH_COOKIE_NAME } from '../../config/config.constants';
-import { ConfigService } from '../../config/config.service';
-import { AuthService } from '../auth.service';
+import { AUTH_COOKIE_MAXAGE, AUTH_COOKIE_NAME } from '../../common/constants';
+import { ConfigService } from '../../config/services';
+import { AuthService } from '../services';
 
 /**
  * Auth Guard using passport local strategy

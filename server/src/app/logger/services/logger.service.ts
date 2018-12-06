@@ -1,8 +1,8 @@
 import { Injectable, LoggerService } from '@nestjs/common';
 import * as pino from 'pino';
 
-import { LOG_ENABLED, LOG_LEVEL } from '../config/config.constants';
-import { ConfigService } from '../config/config.service';
+import { LOG_ENABLED, LOG_LEVEL } from '../../common/constants';
+import { ConfigService } from '../../config/services';
 
 /**
  * Service to log message

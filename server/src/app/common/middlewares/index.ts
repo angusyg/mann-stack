@@ -1,5 +1,5 @@
-export { LoggingMiddleware } from './logging.middleware';
-export { HelmetMiddleware } from './helmet.middleware';
-export { CookieParserMiddleware } from './cookie-parser.middleware';
-export { CorsMiddleware } from './cors.middleware';
-export { CsurfMiddleware } from './csurf.middleware';
+export * from './logging.middleware';
+export * from './helmet.middleware';
+export * from './cookie-parser.middleware';
+export * from './cors.middleware';
+export * from './csurf.middleware';

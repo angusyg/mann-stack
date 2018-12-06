@@ -1,3 +1,9 @@
+/**
+ * JWT access token payload
+ *
+ * @export
+ * @interface Payload
+ */
 export interface Payload {
   /**
    * User id

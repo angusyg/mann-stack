@@ -1,17 +1,16 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as crypto from 'crypto';
-import { Model } from 'mongoose';
+import { randomBytes } from 'crypto';
 import * as uuid from 'uuid';
 
-import { CreateUserDto } from '../common/dto';
-import { Payload } from '../common/interfaces';
-import { MailService } from '../common/providers/mail.service';
-import { AUTH_JWT_EXPIRATION_DELAY, MAIL_USER, URL } from '../config/config.constants';
-import { ConfigService } from '../config/config.service';
-import { Logger } from '../logger/logger.service';
-import { User, UserStatus } from '../common/interfaces/user.interface';
-import { UsersService } from '../users/users.service';
+import { AUTH_JWT_EXPIRATION_DELAY, MAIL_USER, URL } from '../../common/constants';
+import { CreateUserDto } from '../../common/dtos';
+import { Payload } from '../../common/interfaces';
+import { User, UserStatus } from '../../common/interfaces';
+import { MailService } from '../../common/services';
+import { ConfigService } from '../../config/services';
+import { Logger } from '../../logger/services';
+import { UsersService } from '../../users/services';
 
 /**
  * Service to handle user creation and authentication
@@ -79,7 +78,7 @@ export class AuthService {
    * @returns {Promise<User>} owner of JWT
    * @memberof AuthService
    */
-  public async verify(token: string): Promise<User> {
+  public async verify(token: string): Promise<User | null> {
     // Verifies token
     const payload = this._jwtService.verify<Payload>(token);
     // Extracts user from db with _id in token
@@ -99,7 +98,7 @@ export class AuthService {
     // If token passed, put it in user
     if (token) user.confirmToken = token;
     // Updates user with his new refresh token
-    await (user as Model<User>).save();
+    await user.save();
     // Returns with tokens
     return this.generateAccessToken(user, user.refreshToken);
   }
@@ -139,7 +138,7 @@ export class AuthService {
     if (user.status === UserStatus.INACTIVE) {
       // Updates user status
       user.status = UserStatus.ACTIVE;
-      await (user as Model<User>).save();
+      await user.save();
     }
   }
 
@@ -172,7 +171,7 @@ export class AuthService {
    */
   private async sendConfirmEmail(user: User): Promise<string> {
     // Generates a confirmation token
-    const token = crypto.randomBytes(48).toString('hex');
+    const token = randomBytes(48).toString('hex');
     // Creates mail
     const mailOptions = {
       from: this._configService.get(MAIL_USER),

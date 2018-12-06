@@ -1,2 +1,1 @@
-export { MongoExceptionFilter } from './mongo-exception.filter';
-export { AllExceptionFilter } from './all-exception.filter';
+export * from './all-exception.filter';

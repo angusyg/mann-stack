@@ -2,6 +2,14 @@ import { ArgumentsHost, Catch, HttpServer, Inject } from '@nestjs/common';
 import { BaseExceptionFilter, HTTP_SERVER_REF } from '@nestjs/core';
 import { MongoError } from 'mongodb';
 
+/**
+ * Global exception filter to handle all exceptions
+ * Checks type of exeception to handle it correctly
+ *
+ * @export
+ * @class AllExceptionFilter
+ * @extends {BaseExceptionFilter}
+ */
 @Catch()
 export class AllExceptionFilter extends BaseExceptionFilter {
   constructor(@Inject(HTTP_SERVER_REF) applicationRef: HttpServer) {

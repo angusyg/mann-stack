@@ -1,10 +1,10 @@
-import * as bcrypt from 'bcrypt';
-import * as mongoose from 'mongoose';
+import { compare, hashSync } from 'bcrypt';
+import { Schema } from 'mongoose';
 
-import { User, UserRole, UserStatus } from '../../common/interfaces/user.interface';
+import { User, UserRole, UserStatus } from '../../common/interfaces';
 
 // User mongoose schema
-export const UserSchema = new mongoose.Schema({
+export const UserSchema = new Schema({
   login: {
     type: String,
     unique: true,
@@ -37,7 +37,7 @@ export const UserSchema = new mongoose.Schema({
   },
   confirmToken: {
     type: String,
-  }
+  },
 });
 
 // Creates index for unique constraints on login and email
@@ -51,7 +51,7 @@ UserSchema.index({ login: 1, email: 1 }, { unique: true });
  * @memberof UserSchema
  */
 UserSchema.pre<User>('save', function(this: User, next: (...params: any) => void) {
-  if (this.isModified('password')) this.password = bcrypt.hashSync(this.password, 10);
+  if (this.isModified('password')) this.password = hashSync(this.password, 10);
   next();
 });
 
@@ -63,5 +63,5 @@ UserSchema.pre<User>('save', function(this: User, next: (...params: any) => void
  * @memberof UserSchema
  */
 UserSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean> {
-    return await bcrypt.compare(candidatePassword, this.password);
+  return await compare(candidatePassword, this.password);
 };

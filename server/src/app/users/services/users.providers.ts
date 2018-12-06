@@ -1,9 +1,9 @@
 import { Connection } from 'mongoose';
 
-import { DB_CONNECTION_TOKEN, USER_MODEL_TOKEN } from '../common/common.constants';
+import { DB_CONNECTION_TOKEN, USER_MODEL_TOKEN } from '../../common/constants';
+import { UserSchema } from '../schemas';
 
-import { UserSchema } from './schemas/user.schema';
-
+// Defines provider for User mongoose model
 export const usersProviders = [
   {
     provide: USER_MODEL_TOKEN,

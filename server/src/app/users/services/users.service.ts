@@ -1,11 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
-import { USER_MODEL_TOKEN } from '../common/common.constants';
-import { CreateUserDto } from '../common/dto';
-import { Logger } from '../logger/logger.service';
-
-import { User } from '../common/interfaces/user.interface';
+import { USER_MODEL_TOKEN } from '../../common/constants';
+import { CreateUserDto } from '../../common/dtos';
+import { User } from '../../common/interfaces';
+import { Logger } from '../../logger/services';
 
 /**
  * Service to handle User resource
@@ -15,7 +14,7 @@ import { User } from '../common/interfaces/user.interface';
  */
 @Injectable()
 export class UsersService {
-  constructor(@Inject(USER_MODEL_TOKEN) private readonly _userModel: Model<User>, private _logger: Logger) {}
+  constructor(@Inject(USER_MODEL_TOKEN) private readonly _userModel: Model<User>, private readonly _logger: Logger) {}
 
   /**
    * Creates a new User
@@ -49,7 +48,7 @@ export class UsersService {
    * @returns {Promise<User>} found user
    * @memberof UsersService
    */
-  public async findOne(params: any, withPassword?: boolean): Promise<User> {
+  public async findOne(params: any, withPassword?: boolean): Promise<User | null> {
     if (withPassword) {
       return await this._userModel
         .findOne(params)

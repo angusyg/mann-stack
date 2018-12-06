@@ -8,9 +8,16 @@ import { ConfigModule } from './config/config.module';
 import { LoggerModule } from './logger/logger.module';
 import { UsersModule } from './users/users.module';
 
+/**
+ * Application module
+ *
+ * @export
+ * @class AppModule
+ * @implements {NestModule}
+ */
 @Module({
   imports: [ConfigModule, LoggerModule, UsersModule, AuthModule, CommonModule],
-  controllers: [AppController]
+  controllers: [AppController],
 })
 export class AppModule implements NestModule {
   /**
@@ -20,8 +27,6 @@ export class AppModule implements NestModule {
    * @memberof AppModule
    */
   public configure(consumer: MiddlewareConsumer): void {
-    consumer
-      .apply(LoggingMiddleware, HelmetMiddleware, CorsMiddleware, CookieParserMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.ALL });
+    consumer.apply(LoggingMiddleware, HelmetMiddleware, CorsMiddleware, CookieParserMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

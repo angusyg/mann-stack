@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { createTransport, SendMailOptions, Transporter } from 'nodemailer';
 import * as smtpTransport from 'nodemailer-smtp-transport';
 
-import { MAIL_PASSWORD, MAIL_USER } from '../../config/config.constants';
-import { ConfigService } from '../../config/config.service';
+import { MAIL_PASSWORD, MAIL_USER } from '../../common/constants';
+import { ConfigService } from '../../config/services';
 
 /**
- * Service to send email
+ * Service to send emails
  *
  * @export
  * @class MailService
@@ -14,18 +14,21 @@ import { ConfigService } from '../../config/config.service';
 @Injectable()
 export class MailService {
   /**
-   * Promisified send email function
+   * Mailer transporter
    *
    * @private
+   * @type {Transporter}
    * @memberof MailService
    */
-  private _transport: Transporter;
+  private _transporter: Transporter;
 
   constructor(private _configService: ConfigService) {
-    this._transport = createTransport(smtpTransport({
-      service: 'gmail',
-      auth: { user: this._configService.get(MAIL_USER), pass: this._configService.get(MAIL_PASSWORD) },
-    }));
+    this._transporter = createTransport(
+      smtpTransport({
+        service: 'gmail',
+        auth: { user: this._configService.get(MAIL_USER), pass: this._configService.get(MAIL_PASSWORD) },
+      })
+    );
   }
 
   /**
@@ -35,6 +38,6 @@ export class MailService {
    * @memberof MailService
    */
   public async sendMail(mailOptions: SendMailOptions): Promise<void> {
-    await this._transport.sendMail(mailOptions);
+    await this._transporter.sendMail(mailOptions);
   }
 }

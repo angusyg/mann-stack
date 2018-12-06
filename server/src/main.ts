@@ -2,17 +2,29 @@ import { HTTP_SERVER_REF, NestFactory } from '@nestjs/core';
 import { join } from 'path';
 
 import { AppModule } from './app/app.module';
+import { PORT, STATIC_PREFIX, STATIC_SERVE } from './app/common/constants';
 import { AllExceptionFilter } from './app/common/filters';
-import { PORT } from './app/config/config.constants';
-import { ConfigService } from './app/config/config.service';
-import { Logger } from './app/logger/logger.service';
+import { ConfigService } from './app/config/services';
+import { Logger } from './app/logger/services';
 
+
+/**
+ * Bootstrap application
+ *
+ */
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // Logger configuration
   app.useLogger(app.get<Logger>(Logger));
+  // Exception handling
   app.useGlobalFilters(new AllExceptionFilter(app.get(HTTP_SERVER_REF)));
-  app.useStaticAssets(join(__dirname, '../../client/src'), {prefix: '/public/'});
-  await app.listen(app.get<ConfigService>(ConfigService).get(PORT));
+  const configService = app.get<ConfigService>(ConfigService);
+  if (configService.get(STATIC_SERVE) === true) {
+    // Serve static content
+    app.useStaticAssets(join(__dirname, '../../client/src'), { prefix: configService.get(STATIC_PREFIX) });
+  }
+  // Starts server
+  await app.listen(configService.get(PORT));
 }
+
 bootstrap();

@@ -1,17 +1,22 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 
+import { AUTH_JWT_SECRET } from '../common/constants';
 import { CsurfMiddleware } from '../common/middlewares';
-import { AUTH_JWT_SECRET } from '../config/config.constants';
 import { ConfigModule } from '../config/config.module';
-import { ConfigService } from '../config/config.service';
+import { ConfigService } from '../config/services';
 import { UsersModule } from '../users/users.module';
 
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { CookieStrategy } from './passport/cookie.strategy';
-import { LocalStrategy } from './passport/local.strategy';
+import { AuthController } from './controllers';
+import { CookieStrategy, LocalStrategy } from './passport';
+import { AuthService } from './services';
 
+/**
+ * Module for user signup and authentication
+ *
+ * @export
+ * @class AuthModule
+ */
 @Module({
   imports: [
     UsersModule,

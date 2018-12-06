@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 
-import { User } from '../common/interfaces/user.interface';
-import { UsersService } from './users.service';
+import { User } from '../../common/interfaces';
+import { UsersService } from '../services';
 
 /**
  * Controller for User resource

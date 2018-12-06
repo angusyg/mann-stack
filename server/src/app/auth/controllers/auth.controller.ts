@@ -1,13 +1,17 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 
-import { CreateUserDto } from '../common/dto';
-import { AUTH_COOKIE_NAME } from '../config/config.constants';
-import { ConfigService } from '../config/config.service';
+import { AUTH_COOKIE_NAME } from '../../common/constants';
+import { CreateUserDto } from '../../common/dtos';
+import { ConfigService } from '../../config/services';
+import { CookieAuthGuard, LocalAuthGuard } from '../guards';
+import { AuthService } from '../services';
 
-import { AuthService } from './auth.service';
-import { CookieAuthGuard } from './guards/cookie.guard';
-import { LocalAuthGuard } from './guards/local.guard';
-
+/**
+ * Controller for authentication endpoints
+ *
+ * @export
+ * @class AuthController
+ */
 @Controller('api/auth')
 export class AuthController {
   /**
