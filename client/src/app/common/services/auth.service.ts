@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { APP_CONFIG } from '../app-config.module';
 import { AppConfig } from '../models/app-config.model';
 
-import { LoginDto } from './dtos/login.dto';
+import { LoginDto } from '../dtos/login.dto';
 
 @Injectable({
   providedIn: 'root',
