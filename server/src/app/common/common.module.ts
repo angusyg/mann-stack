@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 
-import { MailService } from './services';
+import { ConfigService, MailService } from './services';
 
 /**
  * Global module for common services
@@ -10,7 +10,7 @@ import { MailService } from './services';
  */
 @Global()
 @Module({
-  providers: [MailService],
-  exports: [MailService],
+  providers: [ConfigService, MailService],
+  exports: [ConfigService, MailService],
 })
 export class CommonModule {}

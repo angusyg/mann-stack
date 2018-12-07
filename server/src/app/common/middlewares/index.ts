@@ -1,4 +1,3 @@
-export * from './logging.middleware';
 export * from './helmet.middleware';
 export * from './cookie-parser.middleware';
 export * from './cors.middleware';

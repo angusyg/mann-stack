@@ -7,7 +7,8 @@ import * as csurf from 'csurf';
  * @export
  * @class CsurfMiddleware
  * @implements {NestMiddleware}
- */@Injectable()
+ */
+@Injectable()
 export class CsurfMiddleware implements NestMiddleware {
   public resolve(): MiddlewareFunction {
     return csurf({ cookie: true });
