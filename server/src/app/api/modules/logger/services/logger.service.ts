@@ -48,7 +48,7 @@ export class Logger implements LoggerService {
    * @memberof Logger
    */
   public trace(message: any, data?: any) {
-    this.doLog('trace', message, data);
+    this._doLog('trace', message, data);
   }
 
   /**
@@ -59,7 +59,7 @@ export class Logger implements LoggerService {
    * @memberof Logger
    */
   public debug(message: any, data?: any) {
-    this.doLog('debug', message, data);
+    this._doLog('debug', message, data);
   }
 
   /**
@@ -70,7 +70,7 @@ export class Logger implements LoggerService {
    * @memberof Logger
    */
   public info(message: any, data?: any) {
-    this.doLog('info', message, data);
+    this._doLog('info', message, data);
   }
 
   /**
@@ -81,7 +81,7 @@ export class Logger implements LoggerService {
    * @memberof Logger
    */
   public log(message: any, data?: any) {
-    this.doLog('info', message, data);
+    this._doLog('info', message, data);
   }
 
   /**
@@ -92,7 +92,7 @@ export class Logger implements LoggerService {
    * @memberof Logger
    */
   public warn(message: any, data?: any) {
-    this.doLog('warn', message, data);
+    this._doLog('warn', message, data);
   }
 
   /**
@@ -103,7 +103,7 @@ export class Logger implements LoggerService {
    * @memberof Logger
    */
   public error(message: any, data?: any) {
-    this.doLog('error', message, data);
+    this._doLog('error', message, data);
   }
 
   /**
@@ -114,7 +114,7 @@ export class Logger implements LoggerService {
    * @memberof Logger
    */
   public fatal(message: any, data?: any) {
-    this.doLog('fatal', message, data);
+    this._doLog('fatal', message, data);
   }
 
   /**
@@ -126,9 +126,9 @@ export class Logger implements LoggerService {
    * @param {*} [data] optional data to add to log line
    * @memberof Logger
    */
-  private doLog(level: pino.Level, message: string, data?: any) {
+  private _doLog(level: pino.Level, message: string, data?: any) {
     const child = this._logger.child({
-      caller: this.getCaller(),
+      caller: this._getCaller(),
       data: data ? (data instanceof Error ? data.stack : data) : undefined,
     });
     child[level](message);
@@ -141,7 +141,7 @@ export class Logger implements LoggerService {
    * @returns {string} file:line:column
    * @memberof Logger
    */
-  private getCaller(): string {
+  private _getCaller(): string {
     // If possible, extracts infos from stack
     let caller = '';
     const e = new Error();

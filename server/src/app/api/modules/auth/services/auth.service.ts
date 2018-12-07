@@ -50,7 +50,7 @@ export class AuthService {
       // Email verification, sends email and save confirmation token for user
       try {
         // Sends confirmation email
-        newUser.confirmToken = await this.sendConfirmEmail(newUser);
+        newUser.confirmToken = await this._sendConfirmEmail(newUser);
       } catch (err) {
         // Deletes created user if error sending confirmation email
         await this._usersService.deleteById(newUser._id);
@@ -109,7 +109,7 @@ export class AuthService {
     // Updates user with his new refresh token
     await user.save();
     // Returns with tokens
-    return this.generateAccessToken(user, user.refreshToken);
+    return this._generateAccessToken(user, user.refreshToken);
   }
 
   /**
@@ -183,7 +183,7 @@ export class AuthService {
    * @returns {Promise<string>} JWT access token as string
    * @memberof AuthService
    */
-  private generateAccessToken(user: User, refreshToken: string): string {
+  private _generateAccessToken(user: User, refreshToken: string): string {
     this._logger.debug(`Generating access token for user with login '${user.login}'`);
     return this._jwtService.sign(
       {
@@ -203,7 +203,7 @@ export class AuthService {
    * @returns {Promise<string>} generated token
    * @memberof AuthService
    */
-  private async sendConfirmEmail(user: User): Promise<string> {
+  private async _sendConfirmEmail(user: User): Promise<string> {
     // Generates a confirmation token
     const token = randomBytes(48).toString('hex');
     // Creates mail

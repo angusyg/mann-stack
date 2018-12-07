@@ -24,7 +24,7 @@ export class AllExceptionFilter extends BaseExceptionFilter {
    * @memberof AllExceptionFilter
    */
   public catch(exception: any, host: ArgumentsHost) {
-    if (!this.checkMongoError(exception, host) && !this.checkCsurfError(exception, host)) {
+    if (!this._checkMongoError(exception, host) && !this._checkCsurfError(exception, host)) {
       super.catch(exception, host);
     }
   }
@@ -38,7 +38,7 @@ export class AllExceptionFilter extends BaseExceptionFilter {
    * @returns {boolean} true if error has been handled
    * @memberof AllExceptionFilter
    */
-  private checkCsurfError(exception: any, host: ArgumentsHost): boolean {
+  private _checkCsurfError(exception: any, host: ArgumentsHost): boolean {
     if (typeof exception === 'object' && exception.code === 'EBADCSRFTOKEN') {
       const ctx = host.switchToHttp();
       const response = ctx.getResponse();
@@ -62,7 +62,7 @@ export class AllExceptionFilter extends BaseExceptionFilter {
    * @returns {boolean} true if error has been handled
    * @memberof AllExceptionFilter
    */
-  private checkMongoError(exception: any, host: ArgumentsHost): boolean {
+  private _checkMongoError(exception: any, host: ArgumentsHost): boolean {
     if (typeof exception === 'object' && exception instanceof MongoError) {
       const ctx = host.switchToHttp();
       const response = ctx.getResponse();
