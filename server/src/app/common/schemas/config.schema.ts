@@ -32,7 +32,7 @@ import {
 } from '../../common/constants';
 
 // Environment configuration schema object
-export const ENV_SCHEMA: ObjectSchema = object({
+export const ENV_SCHEMA: ObjectSchema = object().keys({
   [NODE_ENV]: string()
     .valid(['development', 'production', 'test'])
     .default('development'),

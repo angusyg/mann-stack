@@ -1,5 +1,5 @@
 import { parse } from 'dotenv';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { validate } from 'joi';
 import { join } from 'path';
 
@@ -33,10 +33,14 @@ export class ConfigService {
   private readonly _envConfig: EnvConfig;
 
   constructor() {
-    // Load of environment configuration
-    const config = parse(readFileSync(join(ENV_FOLDER, `${process.env.NODE_ENV}.env`)));
+    const envFile = join(ENV_FOLDER, `${process.env.NODE_ENV}.env`);
+    let config = {};
+    if (existsSync(envFile)) {
+      // Load of environment configuration
+      config = parse(readFileSync(envFile));
+    }
     // Validation of configuration values
-    this._envConfig = this.validateInput(config);
+    this._envConfig = this._validateInput(config);
   }
 
   /**
@@ -60,7 +64,7 @@ export class ConfigService {
    * @throws {Error} Config validation error: message
    * @memberof ConfigService
    */
-  private validateInput(envConfig: EnvConfig): EnvConfig {
+  private _validateInput(envConfig: EnvConfig): EnvConfig {
     const { error, value: validatedEnvConfig } = validate(envConfig, ENV_SCHEMA);
     if (error) throw new Error(`Config validation error: ${error.message}`);
     return validatedEnvConfig;
