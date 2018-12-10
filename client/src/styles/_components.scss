@@ -1,0 +1,95 @@
+@import 'mixins';
+
+.btn {
+  @each $type in (primary, secondary, success, danger, warning, info, light, dark) {
+    &.btn-#{$type} {
+      @include background-color('btn-#{$type}-bg-color');
+      @include border('btn-#{$type}-border');
+      @include color('btn-#{$type}-color');
+
+      &:hover {
+        @include background-color('btn-#{$type}-hover-bg-color');
+        @include border('btn-#{$type}-hover-border');
+        @include color('btn-#{$type}-hover-color');
+      }
+
+      &:focus {
+        @include background-color('btn-#{$type}-bg-color');
+        @include border('btn-#{$type}-hover-border');
+        @include box-shadow('btn-#{$type}-box-shadow');
+      }
+    }
+  }
+}
+
+form {
+  .form-group {
+    &:hover,
+    &:focus-within {
+      label {
+        @include color('input-icon-focus-hover-color');
+      }
+
+      .inner-addon {
+        .inner-icon {
+          @include color('input-icon-focus-hover-color');
+        }
+      }
+    }
+
+    .inner-addon {
+      position: relative;
+
+      input {
+        @include background-color('input-bg-color');
+        @include border('input-border');
+        @include color('input-color');
+
+        @include placeholder {
+          font-weight: lighter;
+        }
+
+        &:focus {
+          @include background-color('input-focus-bg-color');
+          @include border('input-focus-border');
+          @include box-shadow('input-focus-box-shadow');
+          @include color('input-focus-color');
+        }
+      }
+
+      .inner-icon {
+        @include color('input-icon-color');
+        padding: .7rem;
+        pointer-events: none;
+        position: absolute;
+      }
+
+      &.left-addon {
+        .inner-icon {
+          left: 0;
+        }
+
+        input {
+          padding-left: 35px;
+        }
+      }
+
+      &.right-addon {
+        .inner-icon {
+          right: 0;
+        }
+
+        input {
+          padding-right: 35px;
+        }
+      }
+    }
+  }
+}
+
+.card {
+  @include background-color('bg-color');
+  @include color('color');
+  border: 0;
+  border-radius: .5rem;
+}

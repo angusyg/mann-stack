@@ -1,0 +1,22 @@
+@import '../../../styles/components';
+
+.card-title {
+  margin-bottom: 1.25rem;
+}
+
+.card-body {
+  form {
+    padding: 1.25rem;
+
+    .btn {
+      margin-top: 1.25rem;
+      width: 100%;
+    }
+  }
+
+  img {
+    border-bottom-left-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+    width: 100%;
+  }
+}

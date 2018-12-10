@@ -1,0 +1,18 @@
+@import 'variables';
+@import 'animations';
+@import 'themes';
+@import 'mixins';
+@import 'functions';
+@import 'components';
+@import '~bootstrap/scss/bootstrap';
+@import '~ngx-toastr/toastr.css';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+
+html,
+body {
+  background: url('../assets/img/background.png') no-repeat center fixed;
+  background-size: cover;
+}

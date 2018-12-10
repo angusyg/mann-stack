@@ -1,0 +1,88 @@
+@import 'themes';
+@import 'functions';
+
+@mixin _themify($deep) {
+  @each $theme, $map in $themes {
+    @if $deep == true {
+      :host-context(.theme-#{$theme}) ::ng-deep {
+        $theme-map: () !global;
+        @each $key, $submap in $map {
+          $value: map-get(map-get($themes, $theme), '#{$key}');
+          $theme-map: map-merge($theme-map, ($key: $value)) !global;
+        }
+        @content;
+        $theme-map: null !global;
+      }
+    } @else {
+      :host-context(.theme-#{$theme}) & {
+        $theme-map: () !global;
+        @each $key, $submap in $map {
+          $value: map-get(map-get($themes, $theme), '#{$key}');
+          $theme-map: map-merge($theme-map, ($key: $value)) !global;
+        }
+        @content;
+        $theme-map: null !global;
+      }
+    }
+  }
+}
+
+@mixin themify() {
+  @include _themify(false) {
+    @content;
+  }
+}
+
+@mixin themifyDeep() {
+  @include _themify(true) {
+    @content;
+  }
+}
+
+@mixin background-color($arguments...) {
+  @include themify() {
+    background-color: themed($arguments...);
+  }
+}
+
+@mixin color($arguments...) {
+  @include themify() {
+    color: themed($arguments...);
+  }
+}
+
+@mixin box-shadow($arguments...) {
+  @include themify() {
+    box-shadow: themed($arguments...);
+  }
+}
+
+@mixin border($arguments...) {
+  @include themify() {
+    border: themed($arguments...);
+  }
+}
+
+@mixin optional-at-root($sel) {
+  @at-root #{if(not &, $sel, selector-append(&, $sel))} {
+    @content;
+  }
+}
+
+@mixin placeholder {
+  @include optional-at-root('::-webkit-input-placeholder') {
+    @content;
+  }
+
+  @include optional-at-root(':-moz-placeholder') {
+    @content;
+  }
+
+  @include optional-at-root('::-moz-placeholder') {
+    @content;
+  }
+
+  @include optional-at-root(':-ms-input-placeholder') {
+    @content;
+  }
+}

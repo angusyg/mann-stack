@@ -1,0 +1,28 @@
+@import '../../styles/mixins';
+
+.navbar {
+  @include background-color('bg-color');
+  margin-bottom: 30px;
+  padding: 0;
+
+  .navbar-brand {
+    padding-bottom: 0;
+    padding-top: 0;
+
+    img {
+      height: 42px;
+    }
+  }
+
+  .nav-item {
+    a {
+      @include color('color');
+    }
+
+    &:hover {
+      @include background-color('navitem-focus-hover-color');
+      border-top-left-radius: .5rem;
+      border-top-right-radius: .5rem;
+    }
+  }
+}
