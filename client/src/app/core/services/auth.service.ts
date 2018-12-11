@@ -7,6 +7,6 @@ export class AuthService {
   constructor() {}
 
   public isAuthenticated(): boolean {
-    return true;
+    return false;
   }
 }

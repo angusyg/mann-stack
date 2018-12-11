@@ -1,6 +1,9 @@
 @import 'mixins';
 
+$input-padding: 35px;
+
 .btn {
+  // Applies themes on possible buttons types
   @each $type in (primary, secondary, success, danger, warning, info, light, dark) {
     &.btn-#{$type} {
       @include background-color('btn-#{$type}-bg-color');
@@ -24,21 +27,29 @@
 
 form {
   .form-group {
+    // Adds coloring of label and inner icon of input filed when hovered or focused
     &:hover,
     &:focus-within {
-      label {
+      // Label
+      label.hovered-focused {
         @include color('input-icon-focus-hover-color');
       }
 
+      // Inner icon
       .inner-addon {
-        .inner-icon {
+        .inner-icon.hovered-focused {
           @include color('input-icon-focus-hover-color');
         }
       }
     }
 
+    // Includes an icon in an input field (on the left or right)
     .inner-addon {
       position: relative;
+
+      +.inner-addon {
+        margin-top: 1rem;
+      }
 
       input {
         @include background-color('input-bg-color');
@@ -49,6 +60,7 @@ form {
           font-weight: lighter;
         }
 
+        // Changes input colors when focused
         &:focus {
           @include background-color('input-focus-bg-color');
           @include border('input-focus-border');
@@ -57,6 +69,7 @@ form {
         }
       }
 
+      // Input inner icon
       .inner-icon {
         @include color('input-icon-color');
         padding: .7rem;
@@ -70,7 +83,7 @@ form {
         }
 
         input {
-          padding-left: 35px;
+          padding-left: $input-padding;
         }
       }
 
@@ -80,13 +93,14 @@ form {
         }
 
         input {
-          padding-right: 35px;
+          padding-right: $input-padding;
         }
       }
     }
   }
 }
 
+// Default card
 .card {
   @include background-color('bg-color');
   @include color('color');

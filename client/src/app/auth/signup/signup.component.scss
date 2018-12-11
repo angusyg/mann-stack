@@ -1,22 +1,41 @@
 @import '../../../styles/components';
 
-.card-title {
-  margin-bottom: 1.25rem;
-}
+.card {
+  padding: 1.25rem;
 
-.card-body {
-  form {
-    padding: 1.25rem;
+  .card-body {
+    padding: 0;
 
-    .btn {
-      margin-top: 1.25rem;
-      width: 100%;
+    form {
+      .btn {
+        width: 100%;
+      }
+    }
+
+    .card-buttons {
+      padding-top: 1.25rem;
     }
   }
 
-  img {
-    border-bottom-left-radius: .5rem;
-    border-bottom-right-radius: .5rem;
-    width: 100%;
+  &.tuto {
+
+    .card-title {
+      margin-bottom: 30px;
+    }
+
+    .col {
+      margin-bottom: 15px;
+      margin-top: 15px;
+    }
+
+    p {
+      font-size: 1.15rem;
+      font-weight: lighter;
+    }
+
+    img {
+      border-radius: .5rem;
+      width: 75px;
+    }
   }
 }

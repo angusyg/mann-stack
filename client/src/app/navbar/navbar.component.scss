@@ -2,6 +2,7 @@
 
 .navbar {
   @include background-color('bg-color');
+  @include color('color');
   margin-bottom: 30px;
   padding: 0;
 
@@ -21,8 +22,6 @@
 
     &:hover {
       @include background-color('navitem-focus-hover-color');
-      border-top-left-radius: .5rem;
-      border-top-right-radius: .5rem;
     }
   }
 }
