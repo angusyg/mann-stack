@@ -1,4 +1,5 @@
 @import '../../styles/mixins';
+@import '../../styles/components';
 
 .navbar {
   @include background-color('bg-color');
@@ -25,3 +26,246 @@
     }
   }
 }
+
+
+@media only screen and (min-width: 1025px) {
+  .team-flag {
+    background-size: 175px 385px;
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media only screen and (max-width: 1025px) {
+  .team-flag {
+    background-size: 125px 275px;
+    width: 25px;
+    height: 25px;
+  }
+}
+
+.team-flag {
+  margin: 5px;
+  background-repeat: no-repeat;
+  background-image: url('../../assets/img/logosl1.png');
+}
+
+.RUS{
+  background-position: 0% 0%;
+}
+
+.COS{
+  background-position: 25% 0%;
+}
+
+.ASA{
+  background-position: 50% 0%;
+}
+
+.EGY{
+  background-position: 75% 0%;
+}
+
+.URU{
+  background-position: 100% 0%;
+}
+
+.MAR{
+  background-position: 0% 10%;
+}
+
+.POR{
+  background-position: 25% 10%;
+}
+
+.IRA{
+  background-position: 50% 10%;
+}
+
+.ESP{
+  background-position: 75% 10%;
+}
+
+.FRA{
+  background-position: 100% 10%;
+}
+
+.AUS{
+  background-position: 0% 20%;
+}
+
+.ARG{
+  background-position: 25% 20%;
+}
+
+.ISL{
+  background-position: 50% 20%;
+}
+
+.PER{
+  background-position: 75% 20%;
+}
+
+.DAN{
+  background-position: 100% 20%;
+}
+
+.CRO{
+  background-position: 0% 30%;
+}
+
+.NIG{
+  background-position: 25% 30%;
+}
+
+.COR{
+  background-position: 50% 30%;
+}
+
+.SER{
+  background-position: 75% 30%;
+}
+
+.ALL{
+  background-position: 100% 30%;
+}
+
+.MEX{
+  background-position: 0% 40%;
+}
+
+.BRE{
+  background-position: 25% 40%;
+}
+
+.SUI{
+  background-position: 50% 40%;
+}
+
+.SUE{
+  background-position: 75% 40%;
+}
+
+.BEL{
+  background-position: 100% 40%;
+}
+
+.TUN{
+  background-position: 0% 50%;
+}
+
+.ANG{
+  background-position: 25% 50%;
+}
+
+.COL{
+  background-position: 50% 50%;
+}
+
+.JAP{
+  background-position: 75% 50%;
+}
+
+.POL{
+  background-position: 100% 50%;
+}
+
+.SEN{
+  background-position: 0% 60%;
+}
+
+.PAN{
+  background-position: 25% 60%;
+}
+
+
+
+.ASSE{
+  background-position: 75% 0%;
+}
+.ANG{
+  background-position: 0% 0%;
+}
+
+.ASM{
+  background-position: 25% 0%;
+}
+
+.ASNL{
+  background-position: 50% 0%;
+}
+
+.BAS{
+  background-position: 100% 0%;
+}
+
+.BDX{
+  background-position: 0% 10%;
+}
+
+.CAEN{
+  background-position: 25% 10%;
+}
+
+.DFCO{
+  background-position: 50% 10%;
+}
+
+.EAG{
+  background-position: 75% 10%;
+}
+
+.LOR{
+  background-position: 100% 10%;
+}
+
+.LOSC{
+  background-position: 0% 20%;
+}
+
+.METZ{
+  background-position: 25% 20%;
+}
+
+.MONT{
+  background-position: 50% 20%;
+}
+
+.NAN{
+  background-position: 75% 20%;
+}
+
+.OGCN{
+  background-position: 100% 20%;
+}
+
+.OL{
+  background-position: 0% 30%;
+}
+
+.OM{
+  background-position: 25% 30%;
+}
+
+.PSG{
+  background-position: 50% 30%;
+}
+
+.REN{
+  background-position: 75% 30%;
+}
+
+.TFC{
+  background-position: 100% 30%;
+}
+
+.ASC{
+  background-position: 50% 40%;
+}
+.ESTAC{
+  background-position: 0% 40%;
+}
+.RCS{
+  background-position: 25% 40%;
+}
+

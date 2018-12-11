@@ -1,28 +1,55 @@
-<nav class="navbar navbar-expand-lg">
-  <div class="container">
-    <a routerLink="" class="navbar-brand"><img src="../../assets/img/logo.png" alt=""></a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item" *ngFor="let item of links">
-          <a [routerLink]="item.routerLink" routerLinkActive="active" class="nav-link">{{ item.title }}</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav">
-        <li class="nav-item"><a routerLink="signup" routerLinkActive="active" class="nav-link">Inscription</a></li>
-        <li class="nav-item"><a routerLink="login" routerLinkActive="active" class="nav-link">Login</a></li>
-      </ul>
+<nav class="navbar navbar-expand-sm navbar-dark bg-secondary d-none d-sm-block">
+    <div class="container">
+      <div class="navbar-nav m-auto">
+        <span class="team-flag ASSE"></span>
+        <span class="team-flag ANG"></span>
+        <span class="team-flag ASM"></span>
+        <span class="team-flag ASNL"></span>
+        <span class="team-flag BAS"></span>
+        <span class="team-flag BDX"></span>
+        <span class="team-flag CAEN"></span>
+        <span class="team-flag DFCO"></span>
+        <span class="team-flag EAG"></span>
+        <span class="team-flag LOR"></span>
+        <span class="team-flag LOSC"></span>
+        <span class="team-flag METZ"></span>
+        <span class="team-flag MONT"></span>
+        <span class="team-flag NAN"></span>
+        <span class="team-flag OGCN"></span>
+        <span class="team-flag OL"></span>
+        <span class="team-flag OM"></span>
+        <span class="team-flag PSG"></span>
+        <span class="team-flag REN"></span>
+        <span class="team-flag TFC"></span>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a routerLink="" class="navbar-brand"><img src="../../assets/img/logo.png" alt=""/></a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item" *ngFor="let item of links">
+            <a [routerLink]="item.routerLink" routerLinkActive="active" class="nav-link">{{ item.title }}</a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control form-control-sm mr-sm-2 " type="text" placeholder="Pseudo" aria-label="Search" />
+          <input class="form-control form-control-sm mr-sm-2" type="password" placeholder="Mot de passe" aria-label="Search" />
+          <button class="btn btn-sm btn-outline-success my-2 my-sm-0" type="submit">Connexion</button>
+        </form>
+      </div>
+    </div>
+  </nav>
