@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
 import { USER_MODEL_TOKEN } from '../../../constants';
-import { CreateUserDto } from '../../../dtos';
+import { SignupDto } from '../../../dtos';
 import { User } from '../../../interfaces';
 import { Logger } from '../../logger/services';
 
@@ -19,11 +19,11 @@ export class UsersService {
   /**
    * Creates a new User
    *
-   * @param {CreateUserDto} createUserDto user to create
+   * @param {SignupDto} createUserDto user to create
    * @returns {Promise<User>} resolved with created user
    * @memberof UsersService
    */
-  public async create(createUserDto: CreateUserDto): Promise<User> {
+  public async create(createUserDto: SignupDto): Promise<User> {
     this._logger.debug(`Creating new user with ${{ login: createUserDto.login, email: createUserDto.email }}`);
     return await this._userModel.create(createUserDto);
   }

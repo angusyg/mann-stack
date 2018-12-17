@@ -3,38 +3,46 @@
     <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
       <div class="card">
         <div class="card-body p-0">
-          <form ac>
+          <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
             <h3 class="card-title ">Inscription</h3>
             <div class="form-group">
               <label for="pseudo" class="hovered-focused">Pseudonyme</label>
               <div class="inner-addon left-addon hovered-focused">
                 <i class="inner-icon hovered-focused fas fa-user"></i>
-                <input type="text" id="pseudo" class="form-control" required placeholder="Ton nom de joueur" />
+                <input type="text" id="pseudo" class="form-control" formControlName="login" placeholder="Ton nom de joueur" />
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" [appFormError]="[signupForm.controls.email]">
               <label for="email" class="hovered-focused">Email</label>
               <div class="inner-addon left-addon">
                 <i class="inner-icon hovered-focused fas fa-envelope"></i>
-                <input type="email" id="email" class="form-control" required placeholder="Ton mail de contact" />
+                <input type="email" id="email" class="form-control" formControlName="email" placeholder="Ton mail de contact" />
+                <span *ngIf="signupForm.controls.email.errors?.email" class="form-error">Format email non valide</span>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" [appFormError]="[signupForm.controls.password]">
               <label for="password" class="hovered-focused">Mot de passe</label>
               <div class="inner-addon left-addon">
                 <i class="inner-icon hovered-focused fas fa-lock"></i>
-                <input type="password" id="password" class="form-control" required placeholder="Mot de passe" />
+                <input type="password" id="password" class="form-control" formControlName="password" placeholder="Mot de passe" />
               </div>
               <div class="inner-addon left-addon">
                 <i class="inner-icon hovered-focused fas fa-lock"></i>
-                <input type="password" class="form-control" id="passwordConf" required placeholder="Confirmation de mot de passe" />
+                <input
+                  type="password"
+                  class="form-control"
+                  id="passwordConf"
+                  formControlName="passwordConf"
+                  placeholder="Confirmation de mot de passe"
+                />
+                <span *ngIf="signupForm.errors?.passwordConfirmation">COnfig error</span>
               </div>
             </div>
             <div *ngIf="signupInvitationCode === true" class="form-group">
               <label for="invitationCode" class="hovered-focused">Code d'invitation</label>
               <div class="inner-addon left-addon">
                 <i class="inner-icon hovered-focused fas fa-envelope-open-text"></i>
-                <input type="text" class="form-control" id="invitationCode" required placeholder="Ton code d'invitation" />
+                <input type="text" class="form-control" id="invitationCode" formControlName="invitationCode" placeholder="Ton code d'invitation" />
               </div>
             </div>
             <div class="card-buttons"><button type="submit" class="btn btn-success w-100">Inscription</button></div>

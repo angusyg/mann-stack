@@ -8,6 +8,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
+import { httpInterceptorProviders } from './core/interceptors';
 import { NavbarModule } from './navbar/navbar.module';
 
 @NgModule({
@@ -16,12 +17,13 @@ import { NavbarModule } from './navbar/navbar.module';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    NgbModule, ToastrModule.forRoot(),
+    NgbModule,
+    ToastrModule.forRoot(),
     AppRoutingModule,
     CoreModule,
-    NavbarModule
+    NavbarModule,
   ],
-  providers: [],
+  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,4 +1,5 @@
 import { HTTP_SERVER_REF, NestFactory } from '@nestjs/core';
+import { useContainer } from 'class-validator';
 
 import { Logger } from './app/api/modules/logger/services';
 import { AppModule } from './app/app.module';
@@ -20,6 +21,8 @@ async function bootstrap() {
     // Serve static content
     app.useStaticAssets(configService.get(STATIC_FOLDER), { prefix: configService.get(STATIC_PREFIX) });
   }
+  // Registers app container for class-validator to look up for validation constraints
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
   // Starts server
   await app.listen(configService.get(PORT));
 }

@@ -43,11 +43,15 @@ form {
       }
     }
 
+    &.form-error {
+      background-color: red;
+    }
+
     // Includes an icon in an input field (on the left or right)
     .inner-addon {
       position: relative;
 
-      +.inner-addon {
+      + .inner-addon {
         margin-top: 1rem;
       }
 
@@ -72,7 +76,7 @@ form {
       // Input inner icon
       .inner-icon {
         @include color('input-icon-color');
-        padding: .7rem;
+        padding: 0.7rem;
         pointer-events: none;
         position: absolute;
       }
@@ -105,5 +109,5 @@ form {
   @include background-color('bg-color');
   @include color('color');
   border: 0;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
 }

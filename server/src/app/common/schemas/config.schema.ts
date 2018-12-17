@@ -4,6 +4,7 @@ import { join } from 'path';
 import {
   AUTH_COOKIE_MAXAGE,
   AUTH_COOKIE_NAME,
+  AUTH_INVITATION_CODE,
   AUTH_JWT_EXPIRATION_DELAY,
   AUTH_JWT_SECRET,
   AUTH_MAIL_CONFIRMATION,
@@ -52,7 +53,7 @@ export const ENV_SCHEMA: ObjectSchema = object().keys({
     .default(['HEAD', 'GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE']),
   [CORS_ALLOWED_HEADERS]: array()
     .items(string())
-    .default(['Authorization', 'Refresh', 'Content-type']),
+    .default(['Authorization', 'Refresh', 'Content-type', 'X-XSRF-TOKEN']),
   [CORS_EXPOSED_HEADERS]: array()
     .items(string())
     .default([]),
@@ -65,6 +66,7 @@ export const ENV_SCHEMA: ObjectSchema = object().keys({
   [AUTH_COOKIE_NAME]: string().default('auth'),
   [AUTH_COOKIE_MAXAGE]: number().default(1000 * 60 * 60 * 24 * 30),
   [AUTH_MAIL_CONFIRMATION]: boolean().default(false),
+  [AUTH_INVITATION_CODE]: string().default('CODE'),
   [CSRF_COOKIE_NAME]: string().default('XSRF-TOKEN'),
   [CSRF_COOKIE_MAXAGE]: number().default(1000 * 60 * 60 * 24 * 30),
   [MAIL_USER]: string(),

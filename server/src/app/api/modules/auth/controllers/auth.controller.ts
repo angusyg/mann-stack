@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Req, Res, Use
 import { JwtService } from '@nestjs/jwt';
 import { Payload } from 'src/app/api/interfaces';
 
-import { CreateUserDto } from '../../../dtos';
+import { SignupDto } from '../../../dtos';
 import { CookieAuthGuard, LocalAuthGuard } from '../guards';
 import { AuthService } from '../services';
 
@@ -25,20 +25,20 @@ export class AuthController {
    */
   @Get('csrf')
   public async initCsrf(@Req() req, @Res() res): Promise<void> {
-    this._authService.setCsrfCookie(req, res);
-    res.status(HttpStatus.NO_CONTENT).send();
+    const token = this._authService.setCsrfCookie(req, res);
+    res.status(HttpStatus.OK).send({ token });
   }
 
   /**
    * Signs up a new user with its informations
    *
    * @param {Response} res response to send
-   * @param {CreateUserDto} user user credentials
+   * @param {SignupDto} user user credentials
    * @returns {Promise<void>}
    * @memberof AuthController
    */
   @Post('signup')
-  public async signUp(@Req() req, @Res() res, @Body(ValidationPipe) user: CreateUserDto): Promise<void> {
+  public async signUp(@Req() req, @Res() res, @Body(ValidationPipe) user: SignupDto): Promise<void> {
     const token = await this._authService.signUp(user);
     this._authService.setAuthCookie(res, token);
     this._authService.setCsrfCookie(req, res);

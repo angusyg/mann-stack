@@ -1,4 +1,4 @@
-import { compare, hashSync } from 'bcrypt';
+import { compare, hashSync } from 'bcryptjs';
 import { Schema } from 'mongoose';
 
 import { User, UserRole, UserStatus } from '../../../interfaces';

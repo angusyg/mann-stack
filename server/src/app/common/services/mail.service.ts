@@ -23,7 +23,7 @@ export class MailService {
    */
   private _transporter: Transporter;
 
-  constructor(private _configService: ConfigService) {
+  constructor(private readonly _configService: ConfigService) {
     this._transporter = createTransport(
       smtpTransport({
         service: 'gmail',

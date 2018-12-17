@@ -1,6 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 
 import { ConfigService, MailService } from './services';
+import { IsValidInvitationCodeConstraint } from './validators';
 
 /**
  * Global module for common services
@@ -10,7 +11,7 @@ import { ConfigService, MailService } from './services';
  */
 @Global()
 @Module({
-  providers: [ConfigService, MailService],
+  providers: [ConfigService, MailService, IsValidInvitationCodeConstraint],
   exports: [ConfigService, MailService],
 })
 export class CommonModule {}

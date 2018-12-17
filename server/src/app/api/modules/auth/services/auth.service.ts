@@ -14,7 +14,7 @@ import {
   URL,
 } from '../../../../common/constants';
 import { ConfigService, MailService } from '../../../../common/services';
-import { CreateUserDto } from '../../../dtos';
+import { SignupDto } from '../../../dtos';
 import { Payload, User, UserStatus } from '../../../interfaces';
 import { Logger } from '../../logger/services';
 import { UsersService } from '../../users/services';
@@ -38,14 +38,14 @@ export class AuthService {
   /**
    * Signs up a new user
    *
-   * @param {CreateUserDto} user new user
+   * @param {SignupDto} user new user
    * @returns {Promise<string>} API access token
    * @memberof AuthService
    */
-  public async signUp(createUserDto: CreateUserDto): Promise<string> {
-    this._logger.debug(`Creating new user with ${{ login: createUserDto.login, email: createUserDto.email }}`);
+  public async signUp(signupDto: SignupDto): Promise<string> {
+    this._logger.debug(`Creating new user with ${{ login: signupDto.login, email: signupDto.email }}`);
     // Creates new user in db
-    const newUser = await this._usersService.create(createUserDto);
+    const newUser = await this._usersService.create(signupDto);
     if (this._configService.get(AUTH_MAIL_CONFIRMATION)) {
       // Email verification, sends email and save confirmation token for user
       try {
@@ -170,10 +170,13 @@ export class AuthService {
    *
    * @param {*} req request
    * @param {*} res response to send
+   * @returns {string} CSRF token
    * @memberof AuthService
    */
-  public setCsrfCookie(req: any, res: any): void {
-    res.cookie(this._configService.get(CSRF_COOKIE_NAME), req.csrfToken(), { httpOnly: false, maxAge: this._configService.get(CSRF_COOKIE_MAXAGE) });
+  public setCsrfCookie(req: any, res: any): string {
+    const token = req.csrfToken();
+    res.cookie(this._configService.get(CSRF_COOKIE_NAME), token, { path: '/', httpOnly: false, maxAge: this._configService.get(CSRF_COOKIE_MAXAGE) });
+    return token;
   }
 
   /**

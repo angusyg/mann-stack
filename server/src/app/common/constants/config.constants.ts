@@ -34,6 +34,7 @@ export const AUTH_JWT_EXPIRATION_DELAY: string = 'AUTH_JWT_EXPIRATION_DELAY';
 export const AUTH_COOKIE_NAME = 'AUTH_COOKIE_NAME';
 export const AUTH_COOKIE_MAXAGE: string = 'AUTH_COOKIE_MAXAGE';
 export const AUTH_MAIL_CONFIRMATION: string = 'AUTH_MAIL_CONFIRMATION';
+export const AUTH_INVITATION_CODE: string = 'AUTH_INVITATION_CODE';
 
 // CSRF configuration
 export const CSRF_COOKIE_NAME: string = 'CSRF_COOKIE_NAME';

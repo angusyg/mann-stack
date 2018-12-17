@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { APP_CONFIG } from '../core.module';
 import { IAppConfig, IUserPayload } from '../interfaces';
@@ -42,7 +42,7 @@ export class AuthService {
   /**
    * Signs up a user
    *
-   * @param {object} infos
+   * @param {object} infos sign up infos
    * @returns {Observable<IUserPayload>}
    * @memberof AuthService
    */
@@ -52,11 +52,17 @@ export class AuthService {
         localStorage.setItem('user', JSON.stringify(response));
         this._signedIn.next(true);
         return response;
-      }),
-      catchError((err: any) => {
-        console.error(err);
-        return throwError(err.error);
       })
     );
+  }
+
+  /**
+   * Gets CSRF cookie and token value
+   *
+   * @returns {Observable<void>}
+   * @memberof AuthService
+   */
+  public initCsrf(): Observable<string> {
+    return this._http.get<any>(`${this._API_URL}/auth/csrf`);
   }
 }
