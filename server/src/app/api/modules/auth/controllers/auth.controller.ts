@@ -1,4 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { Payload } from 'src/app/api/interfaces';
 
 import { CreateUserDto } from '../../../dtos';
 import { CookieAuthGuard, LocalAuthGuard } from '../guards';
@@ -12,7 +14,7 @@ import { AuthService } from '../services';
  */
 @Controller()
 export class AuthController {
-  constructor(private readonly _authService: AuthService) {}
+  constructor(private readonly _authService: AuthService, private readonly _jwtService: JwtService) {}
 
   /**
    * Sets CSRF Cookie for CSRF protection
@@ -40,7 +42,9 @@ export class AuthController {
     const token = await this._authService.signUp(user);
     this._authService.setAuthCookie(res, token);
     this._authService.setCsrfCookie(req, res);
-    res.status(HttpStatus.NO_CONTENT).send();
+    const u = this._jwtService.decode(token, {}) as Payload;
+    delete u.refresh;
+    res.status(HttpStatus.OK).send(u);
   }
 
   /**

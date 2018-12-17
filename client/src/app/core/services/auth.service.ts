@@ -1,12 +1,62 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+
+import { APP_CONFIG } from '../core.module';
+import { IAppConfig, IUserPayload } from '../interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor() {}
+  /**
+   * API Server URL
+   *
+   * @private
+   * @type {string}
+   * @memberof AuthService
+   */
+  private readonly _API_URL: string;
+
+  /**
+   * User connection status
+   *
+   * @private
+   * @memberof AuthService
+   */
+  private readonly _signedIn = new BehaviorSubject<boolean | null>(null);
+
+  constructor(@Inject(APP_CONFIG) private readonly _config: IAppConfig, private readonly _http: HttpClient) {
+    this._API_URL = this._config.serverURL + this._config.apiBase;
+  }
+
+  get isSignedIn(): Observable<boolean | null> {
+    return this._signedIn.asObservable();
+  }
 
   public isAuthenticated(): boolean {
     return false;
+  }
+
+  /**
+   * Signs up a user
+   *
+   * @param {object} infos
+   * @returns {Observable<IUserPayload>}
+   * @memberof AuthService
+   */
+  public signup(infos: object): Observable<IUserPayload> {
+    return this._http.post<any>(`${this._API_URL}/auth/signup`, infos).pipe(
+      map((response: IUserPayload) => {
+        localStorage.setItem('user', JSON.stringify(response));
+        this._signedIn.next(true);
+        return response;
+      }),
+      catchError((err: any) => {
+        console.error(err);
+        return throwError(err.error);
+      })
+    );
   }
 }

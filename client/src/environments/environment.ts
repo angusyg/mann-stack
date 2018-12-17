@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiURL: 'http://localhost:3000',
+  serverURL: 'http://localhost:3000',
+  apiBase: '/api',
   signupInvitationCode: true,
 };
 

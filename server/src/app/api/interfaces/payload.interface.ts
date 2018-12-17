@@ -1,3 +1,5 @@
+import { UserRole } from './user.interface';
+
 /**
  * JWT access token payload
  *
@@ -20,6 +22,14 @@ export interface Payload {
    * @memberof Payload
    */
   login: string;
+
+  /**
+   * User roles array
+   *
+   * @type {UserRole[]}
+   * @memberof Payload
+   */
+  roles: UserRole[];
 
   /**
    * User refresh token

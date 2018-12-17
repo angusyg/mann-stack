@@ -7,12 +7,16 @@
   margin-bottom: 30px;
   padding: 0;
 
+  &.teams-bar {
+    margin-bottom: 0;
+  }
+
   .navbar-brand {
     padding-bottom: 0;
     padding-top: 0;
 
     img {
-      height: 42px;
+      height: 45px;
     }
   }
 
@@ -27,20 +31,19 @@
   }
 }
 
-
 @media only screen and (min-width: 1025px) {
   .team-flag {
     background-size: 175px 385px;
-    width: 35px;
     height: 35px;
+    width: 35px;
   }
 }
 
 @media only screen and (max-width: 1025px) {
   .team-flag {
     background-size: 125px 275px;
-    width: 25px;
     height: 25px;
+    width: 25px;
   }
 }
 
@@ -50,222 +53,219 @@
   background-image: url('../../assets/img/logosl1.png');
 }
 
-.RUS{
+.RUS {
   background-position: 0% 0%;
 }
 
-.COS{
+.COS {
   background-position: 25% 0%;
 }
 
-.ASA{
+.ASA {
   background-position: 50% 0%;
 }
 
-.EGY{
+.EGY {
   background-position: 75% 0%;
 }
 
-.URU{
+.URU {
   background-position: 100% 0%;
 }
 
-.MAR{
+.MAR {
   background-position: 0% 10%;
 }
 
-.POR{
+.POR {
   background-position: 25% 10%;
 }
 
-.IRA{
+.IRA {
   background-position: 50% 10%;
 }
 
-.ESP{
+.ESP {
   background-position: 75% 10%;
 }
 
-.FRA{
+.FRA {
   background-position: 100% 10%;
 }
 
-.AUS{
+.AUS {
   background-position: 0% 20%;
 }
 
-.ARG{
+.ARG {
   background-position: 25% 20%;
 }
 
-.ISL{
+.ISL {
   background-position: 50% 20%;
 }
 
-.PER{
+.PER {
   background-position: 75% 20%;
 }
 
-.DAN{
+.DAN {
   background-position: 100% 20%;
 }
 
-.CRO{
+.CRO {
   background-position: 0% 30%;
 }
 
-.NIG{
+.NIG {
   background-position: 25% 30%;
 }
 
-.COR{
+.COR {
   background-position: 50% 30%;
 }
 
-.SER{
+.SER {
   background-position: 75% 30%;
 }
 
-.ALL{
+.ALL {
   background-position: 100% 30%;
 }
 
-.MEX{
+.MEX {
   background-position: 0% 40%;
 }
 
-.BRE{
+.BRE {
   background-position: 25% 40%;
 }
 
-.SUI{
+.SUI {
   background-position: 50% 40%;
 }
 
-.SUE{
+.SUE {
   background-position: 75% 40%;
 }
 
-.BEL{
+.BEL {
   background-position: 100% 40%;
 }
 
-.TUN{
+.TUN {
   background-position: 0% 50%;
 }
 
-.ANG{
+.ANG {
   background-position: 25% 50%;
 }
 
-.COL{
+.COL {
   background-position: 50% 50%;
 }
 
-.JAP{
+.JAP {
   background-position: 75% 50%;
 }
 
-.POL{
+.POL {
   background-position: 100% 50%;
 }
 
-.SEN{
+.SEN {
   background-position: 0% 60%;
 }
 
-.PAN{
+.PAN {
   background-position: 25% 60%;
 }
 
-
-
-.ASSE{
+.ASSE {
   background-position: 75% 0%;
 }
-.ANG{
+.ANG {
   background-position: 0% 0%;
 }
 
-.ASM{
+.ASM {
   background-position: 25% 0%;
 }
 
-.ASNL{
+.ASNL {
   background-position: 50% 0%;
 }
 
-.BAS{
+.BAS {
   background-position: 100% 0%;
 }
 
-.BDX{
+.BDX {
   background-position: 0% 10%;
 }
 
-.CAEN{
+.CAEN {
   background-position: 25% 10%;
 }
 
-.DFCO{
+.DFCO {
   background-position: 50% 10%;
 }
 
-.EAG{
+.EAG {
   background-position: 75% 10%;
 }
 
-.LOR{
+.LOR {
   background-position: 100% 10%;
 }
 
-.LOSC{
+.LOSC {
   background-position: 0% 20%;
 }
 
-.METZ{
+.METZ {
   background-position: 25% 20%;
 }
 
-.MONT{
+.MONT {
   background-position: 50% 20%;
 }
 
-.NAN{
+.NAN {
   background-position: 75% 20%;
 }
 
-.OGCN{
+.OGCN {
   background-position: 100% 20%;
 }
 
-.OL{
+.OL {
   background-position: 0% 30%;
 }
 
-.OM{
+.OM {
   background-position: 25% 30%;
 }
 
-.PSG{
+.PSG {
   background-position: 50% 30%;
 }
 
-.REN{
+.REN {
   background-position: 75% 30%;
 }
 
-.TFC{
+.TFC {
   background-position: 100% 30%;
 }
 
-.ASC{
+.ASC {
   background-position: 50% 40%;
 }
-.ESTAC{
+.ESTAC {
   background-position: 0% 40%;
 }
-.RCS{
+.RCS {
   background-position: 25% 40%;
 }
-

@@ -189,6 +189,7 @@ export class AuthService {
       {
         _id: user._id,
         login: user.login,
+        roles: user.roles,
         refresh: refreshToken,
       },
       { expiresIn: this._configService.get(AUTH_JWT_EXPIRATION_DELAY) }

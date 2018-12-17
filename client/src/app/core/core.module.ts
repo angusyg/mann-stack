@@ -11,7 +11,8 @@ export const APP_CONFIG = new InjectionToken<IAppConfig>('Application environmen
     {
       provide: APP_CONFIG,
       useValue: {
-        apiURL: environment.apiURL,
+        serverURL: environment.serverURL,
+        apiBase: environment.apiBase,
         signupInvitationCode: environment.signupInvitationCode,
       },
     },

@@ -5,7 +5,16 @@ export interface IAppConfig {
    * @type {string}
    * @memberof AppConfig
    */
-  apiURL: string;
+  serverURL: string;
+
+
+  /**
+   * API base path
+   *
+   * @type {string}
+   * @memberof IAppConfig
+   */
+  apiBase: string;
 
   /**
    * Activates invitation code for signup
