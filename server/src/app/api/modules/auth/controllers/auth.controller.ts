@@ -1,8 +1,8 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Payload } from 'src/app/api/interfaces';
 
 import { SignupDto } from '../../../dtos';
+import { Payload } from '../../../interfaces';
 import { CookieAuthGuard, LocalAuthGuard } from '../guards';
 import { AuthService } from '../services';
 
@@ -33,18 +33,16 @@ export class AuthController {
    * Signs up a new user with its informations
    *
    * @param {Response} res response to send
-   * @param {SignupDto} user user credentials
+   * @param {SignupDto} signupDto user credentials
    * @returns {Promise<void>}
    * @memberof AuthController
    */
   @Post('signup')
-  public async signUp(@Req() req, @Res() res, @Body(ValidationPipe) user: SignupDto): Promise<void> {
-    const token = await this._authService.signUp(user);
+  public async signUp(@Req() req, @Res() res, @Body(ValidationPipe) signupDto: SignupDto): Promise<void> {
+    const token = await this._authService.signUp(signupDto);
     this._authService.setAuthCookie(res, token);
     this._authService.setCsrfCookie(req, res);
-    const u = this._jwtService.decode(token, {}) as Payload;
-    delete u.refresh;
-    res.status(HttpStatus.OK).send(u);
+    res.status(HttpStatus.OK).send(this._extractUserPayload(token));
   }
 
   /**
@@ -67,8 +65,9 @@ export class AuthController {
    */
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  @HttpCode(HttpStatus.NO_CONTENT)
-  public async login(): Promise<void> {}
+  public login(@Req() req, @Res() res): void {
+    res.status(HttpStatus.OK).send(this._extractUserPayload(req.token));
+  }
 
   /**
    * Refreshes an expired access token
@@ -86,5 +85,30 @@ export class AuthController {
       this._authService.setAuthCookie(res, token);
     }
     res.status(HttpStatus.NO_CONTENT).send();
+  }
+
+  /**
+   * Logout user, destroying auth cookie
+   *
+   * @param {*} res response to send
+   * @memberof AuthController
+   */
+  @Get('logout')
+  public logout(@Res() res): void {
+    this._authService.removeAuthCookie(res);
+    res.status(HttpStatus.NO_CONTENT).send();
+  }
+
+  /**
+   * Extracts user payload from JWT token
+   *
+   * @private
+   * @param {string} token JWT token
+   * @memberof AuthController
+   */
+  private _extractUserPayload(token: string): Payload {
+    const payload = this._jwtService.decode(token, {}) as Payload;
+    delete payload.refresh;
+    return payload;
   }
 }

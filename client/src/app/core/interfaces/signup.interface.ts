@@ -1,9 +1,15 @@
-export interface ISignupInfos {
+/**
+ * User sign up infos
+ *
+ * @export
+ * @interface SignupInfos
+ */
+export interface SignupInfos {
   /**
    * User pseudonyme
    *
    * @type {string}
-   * @memberof ISignupInfos
+   * @memberof SignupInfos
    */
   login: string;
 
@@ -11,7 +17,7 @@ export interface ISignupInfos {
    * User password
    *
    * @type {string}
-   * @memberof ISignupInfos
+   * @memberof SignupInfos
    */
   password: string;
 
@@ -19,7 +25,7 @@ export interface ISignupInfos {
    * User confirmation password
    *
    * @type {string}
-   * @memberof ISignupInfos
+   * @memberof SignupInfos
    */
   passwordConf: string;
 
@@ -27,7 +33,7 @@ export interface ISignupInfos {
    * User email
    *
    * @type {string}
-   * @memberof ISignupInfos
+   * @memberof SignupInfos
    */
   email: string;
 

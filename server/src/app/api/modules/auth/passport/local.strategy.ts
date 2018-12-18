@@ -39,7 +39,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       const user = await this._authService.logIn(login, password);
       // If no user found, send error
       if (!user) return done(new UnauthorizedException('USER_NOT_FOUND'), false);
-      // send logged user
+      // Sends logged user
       return done(null, user);
     } catch (err) {
       // Converts error message to request result message

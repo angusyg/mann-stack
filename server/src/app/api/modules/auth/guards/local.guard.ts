@@ -32,6 +32,7 @@ export class LocalAuthGuard extends AuthGuard('local') {
     const response = context.switchToHttp().getResponse();
     // Generates new access token
     const token = await this._authService.getAccessToken(request.user);
+    request.token = token;
     // Set new refreshed token in auth cookie
     this._authService.setAuthCookie(response, token);
     // Generates and sets csrf cookie

@@ -1,4 +1,10 @@
-export interface IAppConfig {
+/**
+ * Application configuration
+ *
+ * @export
+ * @interface AppConfig
+ */
+export interface AppConfig {
   /**
    * API server URL
    *
@@ -7,12 +13,11 @@ export interface IAppConfig {
    */
   serverURL: string;
 
-
   /**
    * API base path
    *
    * @type {string}
-   * @memberof IAppConfig
+   * @memberof AppConfig
    */
   apiBase: string;
 
@@ -20,7 +25,7 @@ export interface IAppConfig {
    * Activates invitation code for signup
    *
    * @type {boolean}
-   * @memberof IAppConfig
+   * @memberof AppConfig
    */
   signupInvitationCode: boolean;
 }

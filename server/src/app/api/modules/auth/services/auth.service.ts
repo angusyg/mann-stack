@@ -166,6 +166,16 @@ export class AuthService {
   }
 
   /**
+   * Destroys auth cookie on response
+   *
+   * @param {*} res response to send
+   * @memberof AuthService
+   */
+  public removeAuthCookie(res: any): void {
+    res.clearCookie(this._configService.get(AUTH_COOKIE_NAME));
+  }
+
+  /**
    * Sets CSRF token cookie
    *
    * @param {*} req request

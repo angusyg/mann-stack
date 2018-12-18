@@ -5,14 +5,14 @@
         <div class="card-body p-0">
           <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
             <h3 class="card-title ">Inscription</h3>
-            <div class="form-group">
+            <div class="form-group" [appFormControlError]="signupForm.controls.login">
               <label for="pseudo" class="hovered-focused">Pseudonyme</label>
               <div class="inner-addon left-addon hovered-focused">
                 <i class="inner-icon hovered-focused fas fa-user"></i>
                 <input type="text" id="pseudo" class="form-control" formControlName="login" placeholder="Ton nom de joueur" />
               </div>
             </div>
-            <div class="form-group" [appFormError]="[signupForm.controls.email]">
+            <div class="form-group" [appFormControlError]="signupForm.controls.email">
               <label for="email" class="hovered-focused">Email</label>
               <div class="inner-addon left-addon">
                 <i class="inner-icon hovered-focused fas fa-envelope"></i>
@@ -20,7 +20,7 @@
                 <span *ngIf="signupForm.controls.email.errors?.email" class="form-error">Format email non valide</span>
               </div>
             </div>
-            <div class="form-group" [appFormError]="[signupForm.controls.password]">
+            <div class="form-group" [appFormControlError]="signupForm.controls.password" appFormGroupError [group]="signupForm" [errors]="['passwordConfirmation']">
               <label for="password" class="hovered-focused">Mot de passe</label>
               <div class="inner-addon left-addon">
                 <i class="inner-icon hovered-focused fas fa-lock"></i>
@@ -38,7 +38,7 @@
                 <span *ngIf="signupForm.errors?.passwordConfirmation">COnfig error</span>
               </div>
             </div>
-            <div *ngIf="signupInvitationCode === true" class="form-group">
+            <div *ngIf="signupInvitationCode === true" class="form-group" [appFormControlError]="signupForm.controls.invitationCode">
               <label for="invitationCode" class="hovered-focused">Code d'invitation</label>
               <div class="inner-addon left-addon">
                 <i class="inner-icon hovered-focused fas fa-envelope-open-text"></i>

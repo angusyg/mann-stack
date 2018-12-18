@@ -3,7 +3,8 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 import { Router } from '@angular/router';
 
 import { APP_CONFIG } from '../../core/core.module';
-import { IAppConfig } from '../../core/interfaces';
+import { AppConfig } from '../../core/interfaces';
+import { UserPayload } from '../../core/interfaces';
 import { AuthService, NotificationService } from '../../core/services';
 
 /**
@@ -18,6 +19,12 @@ function MatchPassword(formGroup: AbstractControl): { [key: string]: any } | nul
   return password && passwordConf && password.value !== passwordConf.value ? { passwordConfirmation: true } : null;
 }
 
+/**
+ * User sign up component (sign up form)
+ *
+ * @export
+ * @class SignupComponent
+ */
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -42,10 +49,10 @@ export class SignupComponent {
   public signupForm: FormGroup;
 
   constructor(
-    @Inject(APP_CONFIG) private _config: IAppConfig,
-    private readonly _authService: AuthService,
-    private readonly _notificationService: NotificationService,
-    private readonly router: Router,
+    @Inject(APP_CONFIG) private _config: AppConfig,
+    private readonly _auth: AuthService,
+    private readonly _notification: NotificationService,
+    private readonly _router: Router,
   ) {
     this.signupInvitationCode = this._config.signupInvitationCode;
     this.signupForm = new FormGroup(
@@ -62,14 +69,16 @@ export class SignupComponent {
 
   public onSubmit() {
     if (this.signupForm.valid) {
-      this._authService.signup(this.signupForm.value).subscribe(
-        user => {
-          this._notificationService.showSuccess(`Hello ${user.login}`);
-          this.router.navigate(['']);
+      // Form validation OK
+      this._auth.signup(this.signupForm.value).subscribe(
+        (user: UserPayload) => {
+          this._notification.showSuccess(`Hello ${user.login}`);
+          // Redirects to home page
+          this._router.navigate(['']);
         },
-        err => {
+        (err: any) => {
           console.error(err);
-          this._notificationService.showError('Erreur lors de l\'inscitpion');
+          this._notification.showError('Erreur lors de l\'inscription');
         }
       );
     }

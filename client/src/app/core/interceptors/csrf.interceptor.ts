@@ -3,6 +3,7 @@ import { Injectable, Injector } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 
+import { CsrfToken } from '../interfaces';
 import { AuthService } from '../services';
 
 /**
@@ -26,16 +27,33 @@ export class CsrfInterceptor implements HttpInterceptor {
   private readonly _CSRF_HEADER: string = 'X-XSRF-TOKEN';
 
   /**
+   * Bad CSRF token error name
+   *
+   * @private
+   * @memberof CsrfInterceptor
+   */
+  private readonly _BAD_CSRF_TOKEN_ERROR: string = 'BAD_CSRF_TOKEN';
+
+  /**
+   * Http error status code for CSRF error
+   *
+   * @private
+   * @type {number}
+   * @memberof CsrfInterceptor
+   */
+  private readonly _CSRF_ERROR_STATUS_CODE: number = 403;
+
+  /**
    * Authentication service
    *
    * @private
    * @type {AuthService}
    * @memberof CsrfInterceptor
    */
-  private readonly _authService: AuthService;
+  private readonly _auth: AuthService;
 
-  constructor(private readonly _tokenService: HttpXsrfTokenExtractor, private readonly injector: Injector) {
-    this._authService = this.injector.get(AuthService);
+  constructor(private readonly _token: HttpXsrfTokenExtractor, private readonly _injector: Injector) {
+    this._auth = this._injector.get(AuthService);
   }
 
   /**
@@ -49,7 +67,7 @@ export class CsrfInterceptor implements HttpInterceptor {
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (req.method !== 'GET' && req.method !== 'HEAD') {
       // Extracts token value from cookie
-      const csrfToken = this._tokenService.getToken();
+      const csrfToken = this._token.getToken();
       // Be careful not to overwrite an existing header of the same name
       if (csrfToken !== null && !req.headers.has(this._CSRF_HEADER)) {
         // Adds csrf token header
@@ -59,10 +77,10 @@ export class CsrfInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((err: any) => {
         // Checks error
-        if (err.status === 403 && err.error.error === 'BAD_CSRF_TOKEN') {
+        if (err.status === this._CSRF_ERROR_STATUS_CODE && err.error.error === this._BAD_CSRF_TOKEN_ERROR) {
           // If error, if invalid csrf token, renew token and retry request
-          return this._authService.initCsrf().pipe(
-            switchMap((token: any) => next.handle(this._addCsrfToken(req, token.token))),
+          return this._auth.initCsrf().pipe(
+            switchMap((token: CsrfToken) => next.handle(this._addCsrfToken(req, token.token))),
             catchError((erro: any) => throwError(erro.error))
           );
         } else {

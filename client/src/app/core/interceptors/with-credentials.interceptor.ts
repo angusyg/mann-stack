@@ -3,7 +3,7 @@ import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { APP_CONFIG } from '../core.module';
-import { IAppConfig } from '../interfaces';
+import { AppConfig } from '../interfaces';
 
 /**
  * Interceptor to allow navigator to add cookies on requests
@@ -26,11 +26,10 @@ export class WithCredentialsInterceptor implements HttpInterceptor {
 
   constructor(private readonly injector: Injector) {
     // Gets config
-    const config = this.injector.get(APP_CONFIG) as IAppConfig;
+    const config = this.injector.get(APP_CONFIG) as AppConfig;
     // Construct API server URL
     this._baseUrl = config.serverURL + config.apiBase;
   }
-
 
   /**
    * Intercepts request to add credentials if needed
@@ -42,7 +41,7 @@ export class WithCredentialsInterceptor implements HttpInterceptor {
    */
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Checks if request if for API server (with its URL)
-    if (req.url.toLowerCase().startsWith(this._baseUrl.toLowerCase())) {
+    if (req.url.toLowerCase().startsWith(this._baseUrl.toLowerCase()) && req.withCredentials !== true) {
       // Change credentials for request
       req = req.clone({ withCredentials: true });
     }

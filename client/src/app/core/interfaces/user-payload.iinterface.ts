@@ -9,19 +9,18 @@ export enum UserRole {
   USER = 'USER',
 }
 
-
 /**
  * User payload
  *
  * @export
- * @interface IUserPayload
+ * @interface UserPayload
  */
-export interface IUserPayload {
+export interface UserPayload {
   /**
    * User id
    *
    * @type {string}
-   * @memberof IUserPayload
+   * @memberof UserPayload
    */
   _id: string;
 
@@ -29,7 +28,7 @@ export interface IUserPayload {
    * User login
    *
    * @type {string}
-   * @memberof IUserPayload
+   * @memberof UserPayload
    */
   login: string;
 
@@ -37,7 +36,7 @@ export interface IUserPayload {
    * User roles array
    *
    * @type {UserRole[]}
-   * @memberof IUserPayload
+   * @memberof UserPayload
    */
   roles: UserRole[];
 }
